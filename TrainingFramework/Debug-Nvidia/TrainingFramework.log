@@ -1,0 +1,5 @@
+﻿  Shaders.cpp
+c:\users\dell\desktop\programming_lesson_06\trainingframework\src\gameobject\shaders.cpp(25): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'const std::string'
+c:\users\dell\desktop\programming_lesson_06\trainingframework\src\gameobject\shaders.cpp(32): warning C4477: 'printf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'const std::string'
+  TrainingFramework.vcxproj -> C:\Users\dell\Desktop\Programming_lesson_06\\BIN-Nvidia\TrainingFramework.exe
+  TrainingFramework.vcxproj -> C:\Users\dell\Desktop\Programming_lesson_06\\BIN-Nvidia\TrainingFramework.pdb (Full PDB)

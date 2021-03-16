@@ -1,0 +1,1105 @@
+﻿#include "GSPlay.h"
+#include "Shaders.h"
+#include "Texture.h"
+#include "Models.h"
+#include "Camera.h"
+#include "Font.h"
+#include "Sprite2D.h"
+#include "Sprite3D.h"
+#include "Text.h"
+#include "iostream"
+#include "SpriteAnimation.h"
+#define MAX_RD_DELTATIME 90
+#define MIN_RD_DELTATIME 90
+#define OMEGA 100
+using namespace std;
+extern int screenWidth; //need get on Graphic engine
+extern int screenHeight; //need get on Graphic engine
+
+int real_screenWidth = screenWidth * 1350/1520; // = 1350 pixel
+int real_screenHeight = screenHeight * 650/800; // = 650 pixel
+
+GSPlay::GSPlay()
+{
+}
+
+
+GSPlay::~GSPlay()
+{
+
+}
+
+//Chiều ngang: 1350 pixel, 50 pixel/block, 27 block = 14 gạch/cỏ + 13 đá
+int GSPlay::getWidthBlock_from_WidthPixel(int now_WidthPixel) {
+	if (0.5 * (screenWidth - real_screenWidth) <= now_WidthPixel &&
+		now_WidthPixel < real_screenWidth + 0.5 * (screenWidth - real_screenWidth))//từ 85 đến 1435
+		return (int)((now_WidthPixel - 0.5 * (screenWidth - real_screenWidth))	//thụt 85
+			*27.0 / 1350 + 1.0);
+	else if (now_WidthPixel == real_screenWidth + 0.5 * (screenWidth - real_screenWidth))
+		return 27;
+	else return 0;
+}
+
+//chiều cao: 650 pixel, 50 pixel/block, 13 block = 7 gạch/ cỏ + 6 đá
+int GSPlay::getHeightBlock_from_HeightPixel(int now_HeightPixel){
+	if (0.5 * (screenHeight - real_screenHeight) <= now_HeightPixel &&
+		now_HeightPixel < real_screenHeight + 0.5 * (screenHeight - real_screenHeight)) //từ 75 đến 725
+		return (int)((now_HeightPixel - 0.5 * (screenHeight - real_screenHeight)) //thụt 75
+			*13.0 / 650 + 1.0);
+	else if (now_HeightPixel == real_screenHeight + 0.5 * (screenHeight - real_screenHeight))
+		return 13;
+	else return 0;
+}
+
+int GSPlay::getWidthPixel_from_WidthBlock(int now_WidthBlock) {	//chiều ngang
+	return 50 * (now_WidthBlock*1.0 - 0.5f)*1.0f
+		+ 0.5 * (screenWidth - real_screenWidth);
+}
+
+int GSPlay::getHeightPixel_from_HeightBlock(int now_HeightBlock) {//chiều cao
+	return 50 * (now_HeightBlock*1.0 - 0.5f)*1.0f
+		+ 0.5 * (screenHeight - real_screenHeight);
+}
+
+void GSPlay::InitBricks() {
+	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/brick");
+	for (int i = 9; i <= 21; i += 2) {	//width
+		for (int j = 1; j <= 9; j += 2) {	//height
+			int width_pixel = getWidthPixel_from_WidthBlock(i);	//lấy tâm pixel của block
+			int height_pixel = getHeightPixel_from_HeightBlock(j);	//lấy tâm pixel của block
+			std::shared_ptr<Sprite2D> brick = std::make_shared<Sprite2D>(model, shader, texture);
+			brick->Set2DPosition(width_pixel, height_pixel);
+			brick->SetSize(50, 50);
+			m_bricks.push_back(brick);
+		}
+	}
+}
+
+void GSPlay::InitRocks() {
+	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/Rock");
+	for (int i = 2; i <= 26; i += 2) {	//width
+		for (int j = 2; j <= 12; j += 2) {	//height
+			int width_pixel = getWidthPixel_from_WidthBlock(i);	//lấy tâm pixel của block
+			int height_pixel = getHeightPixel_from_HeightBlock(j);	//lấy tâm pixel của block
+			std::shared_ptr<Sprite2D> rock = std::make_shared<Sprite2D>(model, shader, texture);
+			rock->Set2DPosition(width_pixel, height_pixel);
+			rock->SetSize(50, 50);
+			m_rocks.push_back(rock);
+		}
+	}
+}
+
+void GSPlay::InitEnemies() {
+	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	
+
+	//1
+	auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/pig");
+	std::shared_ptr<SpriteAnimation> pig = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	pig->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(13));
+	pig->SetSize(50, 50);
+	m_enemies.push_back(pig);
+
+
+	//2
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/dog");
+	std::shared_ptr<SpriteAnimation> dog = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	dog->Set2DPosition(getWidthPixel_from_WidthBlock(25), getHeightPixel_from_HeightBlock(13));
+	dog->SetSize(50, 50);
+	m_enemies.push_back(dog);
+
+
+	//3
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/frog");
+	std::shared_ptr<SpriteAnimation> frog = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	frog->Set2DPosition(getWidthPixel_from_WidthBlock(23), getHeightPixel_from_HeightBlock(13));
+	frog->SetSize(50, 50);
+	m_enemies.push_back(frog);
+
+
+	//4
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/ghost");
+	std::shared_ptr<SpriteAnimation> ghost = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	ghost->Set2DPosition(getWidthPixel_from_WidthBlock(21), getHeightPixel_from_HeightBlock(13));
+	ghost->SetSize(50, 50);
+	m_enemies.push_back(ghost);
+
+
+	//5
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/bear");
+	std::shared_ptr<SpriteAnimation> bear = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	bear->Set2DPosition(getWidthPixel_from_WidthBlock(19), getHeightPixel_from_HeightBlock(13));
+	bear->SetSize(50, 50);
+	m_enemies.push_back(bear);
+
+
+	//6
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/mushroom");
+	std::shared_ptr<SpriteAnimation> mushroom = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	mushroom->Set2DPosition(getWidthPixel_from_WidthBlock(17), getHeightPixel_from_HeightBlock(13));
+	mushroom->SetSize(50, 50);
+	m_enemies.push_back(mushroom);
+
+
+	//7
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/pagman");
+	std::shared_ptr<SpriteAnimation> pagman = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	pagman->Set2DPosition(getWidthPixel_from_WidthBlock(15), getHeightPixel_from_HeightBlock(13));
+	pagman->SetSize(50, 50);
+	m_enemies.push_back(pagman);
+
+
+	//8
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/skull");
+	std::shared_ptr<SpriteAnimation> skull = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	skull->Set2DPosition(getWidthPixel_from_WidthBlock(13), getHeightPixel_from_HeightBlock(13));
+	skull->SetSize(50, 50);
+	m_enemies.push_back(skull);
+
+
+	//9
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/snake");
+	std::shared_ptr<SpriteAnimation> snake = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	snake->Set2DPosition(getWidthPixel_from_WidthBlock(11), getHeightPixel_from_HeightBlock(13));
+	snake->SetSize(50, 50);
+	m_enemies.push_back(snake);
+
+
+	//10
+	texture = ResourceManagers::GetInstance()->GetTexture("enemies/coin");
+	std::shared_ptr<SpriteAnimation> coin = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+	coin->Set2DPosition(getWidthPixel_from_WidthBlock(9), getHeightPixel_from_HeightBlock(13));
+	coin->SetSize(50, 50);
+	m_enemies.push_back(coin);
+
+	for (int i = 0; i < m_enemies.size(); i++) {
+		cout << i << " ";
+		m_enemies_direction.push_back(rand() % 4 + 1);	//khởi tạo hướng đi ngẫu nhiên cho enemy
+		Venemies.push_back(6);	//vận tốc ban đầu của tất cả enemies là 6 pixel/deltaTime
+	}
+	cout << "m_enemies_direction.size = " << m_enemies_direction.size() << "\n";
+	cout << "Venemies.size = " << Venemies.size() << "\n";
+}
+
+void GSPlay::Init()
+{
+	InitBricks();
+	InitRocks();
+	InitEnemies();
+	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/grass");
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	m_BackGround = std::make_shared<Sprite2D>(model, shader, texture);
+	m_BackGround->Set2DPosition(screenWidth / 2, screenHeight / 2);
+	m_BackGround->SetSize(real_screenWidth, real_screenHeight);
+
+	//nút back
+	texture = ResourceManagers::GetInstance()->GetTexture("button_back");
+	std::shared_ptr<GameButton> button = std::make_shared<GameButton>(model, shader, texture);
+	button->Set2DPosition(screenWidth-75, 30);
+	button->SetSize(150, 50);
+	button->SetOnClick([]() {
+		GameStateMachine::GetInstance()->PopState();
+		ResourceManagers::GetInstance()->PlaySound("introduction", true);
+	});
+	m_listButton.push_back(button);
+	//m_listButton.erase(m_listButton.begin() + chỉ số vector cần xóa);
+
+	//bomberman
+	shader = ResourceManagers::GetInstance()->GetShader("Animation");
+	texture = ResourceManagers::GetInstance()->GetTexture("bomberman/bomberman_running");
+	buttonDragDrop = std::make_shared<SpriteAnimation>(model, shader, texture, 12, 1.0f/30);
+	buttonDragDrop->Set2DPosition(
+		getWidthPixel_from_WidthBlock(1),
+		getHeightPixel_from_HeightBlock(1)
+	);
+	buttonDragDrop->SetSize(50, 50);
+	//bomberman
+
+	//score
+	shader = ResourceManagers::GetInstance()->GetShader("TextShader");
+	std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
+	m_score = std::make_shared< Text>(shader, font, "Score: 0", TEXT_COLOR::RED, 1.0);	//so diem
+	m_score->Set2DPosition(Vector2(5, 25));
+
+	//level
+	m_level = std::make_shared< Text>(shader, font, "Level: 1", TEXT_COLOR::YELLOW, 1.0);	//level
+	m_level->Set2DPosition(Vector2(225, 25));
+
+	//coins total quantity
+	m_coins = std::make_shared< Text>(shader, font, "x: 0", TEXT_COLOR::RED, 1.0);	//so xu da an duoc
+	m_coins->Set2DPosition(screenWidth - 225, 37);
+
+	// Animation đồng xu
+	shader = ResourceManagers::GetInstance()->GetShader("Animation");
+	texture = ResourceManagers::GetInstance()->GetTexture("bomberman/bomberman_dead");
+	std::shared_ptr<SpriteAnimation> objCoin = std::make_shared<SpriteAnimation>(model, shader, texture, 8, 1.0f/4);
+	objCoin->Set2DPosition(screenWidth - 240, 30);
+	objCoin->SetSize(22, 22);
+	m_listSpriteAnimations.push_back(objCoin);
+	
+	ResourceManagers::GetInstance()->PlaySound("level" + to_string(level) , true);	//true là có lặp lại
+}
+
+void GSPlay::Exit()
+{
+
+}
+
+
+void GSPlay::Pause()
+{
+
+}
+
+void GSPlay::Resume()
+{
+
+}
+
+
+void GSPlay::HandleEvents()
+{
+
+}
+
+void GSPlay::FinishBomb(float deltaTime) {
+	if (finishBomb1Time > 0)
+		finishBomb1Time -= 1 * deltaTime;
+	//cout << "finishBomb1Time = " << finishBomb1Time << " hasBomb1BeenFinished = " << hasBomb1BeenFinished << "\n";
+	if (finishBomb1Time < 0 && hasBomb1BeenFinished == 0) {	//nếu hết thời gian mà bom chưa nổ thì kick nổ quả bom
+		SetExplode(m_bombs[0]->Get2DPosition().x, m_bombs[0]->Get2DPosition().y);
+		m_bombs.erase(m_bombs.begin() + 0);
+		hasBomb1BeenFinished = 1;	// xem như bom 1 chưa nổ
+	}
+
+}
+
+void GSPlay::FinishExplode(float deltaTime) {
+	//bom 1
+	if (finishFireTime > 0)	//nếu tia lửa vẫn còn xuất hiện
+		finishFireTime -= 1 * deltaTime;
+	if (finishFireTime < 0 && hasFireBeenFinished == 0) {	//nếu tia lửa đã cháy hết thì ẩn đi
+		finishFireTime = 0;
+		m_fires.clear();
+		hasFireBeenFinished = 1;
+	}
+
+}
+
+void GSPlay::SetBomb(int pixelWidth, int pixelHeight) {
+	//if (MAXBOMB >= 1) {
+	//	MAXBOMB--;
+		BOMB b; b.index = 1; b.xBlock = getWidthBlock_from_WidthPixel(pixelWidth); b.yBlock = getHeightBlock_from_HeightPixel(pixelHeight);
+		bombstatus.push(b);
+		int blockWidth = getWidthBlock_from_WidthPixel(pixelWidth);
+		int blockHeight = getHeightBlock_from_HeightPixel(pixelHeight);
+		if (hasBomb1BeenFinished == 1) {
+			finishBomb1Time = 4;
+			auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+			auto shader = ResourceManagers::GetInstance()->GetShader("Animation");
+			auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/bomb");
+			std::shared_ptr<SpriteAnimation> bomb = std::make_shared<SpriteAnimation>(model, shader, texture, 2, 1.0f / 30);
+			bomb->Set2DPosition(
+				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth)),
+				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight)));
+			bomb->SetSize(50, 50);
+			m_bombs.push_back(bomb);
+			hasBomb1BeenFinished = 0;
+		}
+	//}
+}
+
+void GSPlay::SetExplode(int pixelWidth, int pixelHeight) {	//khi bom 1 nổ thì gọi hàm này
+	int blockWidth = getWidthBlock_from_WidthPixel(pixelWidth);
+	int blockHeight = getHeightBlock_from_HeightPixel(pixelHeight);
+	if (hasFireBeenFinished == 1) {
+		finishFireTime = 1;
+		finishBomb1Time = 4;
+		//nổ về 4 phía
+			ExplodeLeft(pixelWidth, pixelHeight, 1);
+			ExplodeRight(pixelWidth, pixelHeight, 1);
+			ExplodeUp(pixelWidth, pixelHeight, 1);
+			ExplodeDown(pixelWidth, pixelHeight, 1);
+			//bom 1 nổ, xem xét vị trí của nó so với bom 2 và trạng thái của bombstatus
+			if (bombstatus.size() == 2) {	//nếu đang có 2 quả bom trên màn hình
+				if (bombstatus.front().index == 1) {	//giả sử bom 1 nổ trước, tác động đến bom 2
+					if (bombstatus.front().xBlock == bombstatus.back().xBlock) {	//cùng 1 cột
+						if (abs(bombstatus.front().yBlock - bombstatus.back().yBlock) <= 8) {
+							//cùng 1 hàng và cách nhau chưa tới 8 theo chiều ngang
+							finishBomb2Time = 0.0000001;
+						}
+					}
+					if (bombstatus.front().yBlock == bombstatus.back().yBlock) {	//cùng 1 hàng
+						if (abs(bombstatus.front().xBlock - bombstatus.back().xBlock) <= 8) {
+							//cùng 1 cột và cách nhau chưa tới 8 theo chiều dọc
+							finishBomb2Time = 0.0000001;
+						}
+					}
+				}
+			}
+			//
+	}
+	hasFireBeenFinished = 0;
+	//MAXBOMB++;
+	bombstatus.pop();
+}
+
+
+void GSPlay::ExplodeLeft(int pixelWidth, int pixelHeight, int whichFire) {
+	vector<int> blockWidths;	//chứa blockWidth của các viên gạch
+	vector<int> blockHeights;	//chứa blockHeight của các viên gạch
+	vector<int> index_m_bricks;
+	//	cout << " m_bricks.size() = "<< m_bricks.size()<<"\n";
+	for (int i = 0; i < m_bricks.size(); i++) {	//duyệt từng viên gạch một
+		blockWidths.push_back(getWidthBlock_from_WidthPixel(m_bricks[i]->Get2DPosition().x));
+		blockHeights.push_back(getHeightBlock_from_HeightPixel(m_bricks[i]->Get2DPosition().y));
+		index_m_bricks.push_back(i);
+	}
+	/*
+	for (int i = 0; i < blockWidths.size(); i++) {
+	cout << "blockWidths[" << i << "] = " << blockWidths[i]<<" ";
+	cout << "blockHeights[" << i << "] = " << blockHeights[i] << " ";
+	cout << "index_m_bricks[" << i << "] = " << index_m_bricks[i] << "\n";
+	}
+	*/
+	//tất cả tọa độ theo block của các viên gạch đã được lưu trong blockWidths và blockHeights
+	for (int i = 1; i <= 8; i++) {
+		//ko gặp cỏ mà gặp gạch hoặc đá
+		if (isGrass(pixelWidth - 50 * i, pixelHeight) == false) {	//dù gặp gạch hay gặp đá thì vòng lặp cũng sẽ dừng lại ngay lập tức
+																	//gặp đá thì break luôn (tọa độ block theo cả 2 chiều đều là số chẵn)
+			for (int j = 0; j < blockWidths.size(); j++) {
+				if (getWidthBlock_from_WidthPixel(pixelWidth - 50 * i) == blockWidths[j] && getHeightBlock_from_HeightPixel(pixelHeight) == blockHeights[j]) {
+					//nếu chạm vào gạch thì phá viên gạch đó
+					/*
+					cout << "Số viên gạch trước là = " << m_bricks.size() << "\n";
+					for (int k = 0; k < m_bricks.size(); k++) {
+					cout << "blockWidths[" << k << "] = " << m_bricks[k]->Get2DPosition().x << " ";
+					cout << "blockHeights[" << k << "] = " << m_bricks[k]->Get2DPosition().y << " \n";
+					}*/
+					m_bricks.erase(m_bricks.begin() + index_m_bricks[j]);
+					/*
+					cout << "Số viên gạch sau là = " << m_bricks.size() << "\n";
+					for (int k = 0; k < m_bricks.size(); k++) {
+					cout << "blockWidths[" << k << "] = " << m_bricks[k]->Get2DPosition().x << " ";
+					cout << "blockHeights[" << k << "] = " << m_bricks[k]->Get2DPosition().y << " \n";
+					}*/
+					break;	//phá xong thì break
+				}
+			}
+			//gặp gạch thì phá gạch và break luôn
+			//ko gặp viên gạch nào thì có nghĩa là gặp đá, cũng break luôn
+			break;
+		}
+		//gặp cỏ thì cho đi tiếp
+		auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+		auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/fire");
+		std::shared_ptr<Sprite2D> fireL = std::make_shared<Sprite2D>(model, shader, texture);
+		
+		
+		int ROUNDED_widthPixel = getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth - 50 * i));
+		int ROUNDED_heightPixel = getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight));
+
+		if (getWidthBlock_from_WidthPixel(pixelWidth - 50 * i) > 0 && getHeightBlock_from_HeightPixel(pixelHeight) > 0)
+		fireL->Set2DPosition(
+			ROUNDED_widthPixel,	//di chuyển tia lửa sang phải
+			ROUNDED_heightPixel);
+		else fireL->Set2DPosition(0, 0);
+
+
+		fireL->SetSize(50, 50);
+		if (whichFire == 1)
+			m_fires.push_back(fireL);
+		else if (whichFire == 2)
+			m_fires2.push_back(fireL);
+	}
+};
+void GSPlay::ExplodeRight(int pixelWidth, int pixelHeight, int whichFire) {
+	vector<int> blockWidths;	//chứa blockWidth của các viên gạch
+	vector<int> blockHeights;	//chứa blockHeight của các viên gạch
+	vector<int> index_m_bricks;
+//	cout << " m_bricks.size() = "<< m_bricks.size()<<"\n";
+	for (int i = 0; i < m_bricks.size(); i++) {	//duyệt từng viên gạch một
+			blockWidths.push_back(getWidthBlock_from_WidthPixel(m_bricks[i]->Get2DPosition().x));
+			blockHeights.push_back(getHeightBlock_from_HeightPixel(m_bricks[i]->Get2DPosition().y));
+			index_m_bricks.push_back(i);
+	}
+	/*
+	for (int i = 0; i < blockWidths.size(); i++) {
+		cout << "blockWidths[" << i << "] = " << blockWidths[i]<<" ";
+		cout << "blockHeights[" << i << "] = " << blockHeights[i] << " ";
+		cout << "index_m_bricks[" << i << "] = " << index_m_bricks[i] << "\n";
+	}
+	*/
+	//tất cả tọa độ theo block của các viên gạch đã được lưu trong blockWidths và blockHeights
+	for (int i = 1; i <= 8; i++) {
+		//ko gặp cỏ mà gặp gạch hoặc đá
+		if (isGrass(pixelWidth + 50 * i, pixelHeight) == false) {	//dù gặp gạch hay gặp đá thì vòng lặp cũng sẽ dừng lại ngay lập tức
+			//gặp đá thì break luôn (tọa độ block theo cả 2 chiều đều là số chẵn)
+			for (int j = 0; j < blockWidths.size(); j++) {
+				if (getWidthBlock_from_WidthPixel(pixelWidth + 50 * i) == blockWidths[j] && getHeightBlock_from_HeightPixel(pixelHeight) == blockHeights[j]) {
+					//nếu chạm vào gạch thì phá viên gạch đó
+					/*
+					cout << "Số viên gạch trước là = " << m_bricks.size() << "\n";
+					for (int k = 0; k < m_bricks.size(); k++) {
+						cout << "blockWidths[" << k << "] = " << m_bricks[k]->Get2DPosition().x << " ";
+						cout << "blockHeights[" << k << "] = " << m_bricks[k]->Get2DPosition().y << " \n";
+					}*/
+					m_bricks.erase(m_bricks.begin() + index_m_bricks[j]);
+					/*
+					cout << "Số viên gạch sau là = " << m_bricks.size() << "\n";
+					for (int k = 0; k < m_bricks.size(); k++) {
+						cout << "blockWidths[" << k << "] = " << m_bricks[k]->Get2DPosition().x << " ";
+						cout << "blockHeights[" << k << "] = " << m_bricks[k]->Get2DPosition().y << " \n";
+					}*/
+					break;	//phá xong thì break
+				}
+			}
+			//gặp gạch thì phá gạch và break luôn
+			//ko gặp viên gạch nào thì có nghĩa là gặp đá, cũng break luôn
+			break;
+		}
+		//gặp cỏ thì cho đi tiếp
+		auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+		auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/fire");
+		std::shared_ptr<Sprite2D> fireR = std::make_shared<Sprite2D>(model, shader, texture);
+
+
+		int ROUNDED_widthPixel = getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth + 50 * i));
+		int ROUNDED_heightPixel = getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight));
+
+		if (getWidthBlock_from_WidthPixel(pixelWidth + 50 * i) > 0 && getHeightBlock_from_HeightPixel(pixelHeight) > 0)
+		fireR->Set2DPosition(
+			ROUNDED_widthPixel,	//di chuyển tia lửa sang phải
+			ROUNDED_heightPixel);
+		else fireR->Set2DPosition(0, 0);
+		fireR->SetSize(50, 50);
+
+
+
+		if (whichFire == 1)
+			m_fires.push_back(fireR);
+		else if (whichFire == 2)
+			m_fires2.push_back(fireR);
+	}
+};
+void GSPlay::ExplodeUp(int pixelWidth, int pixelHeight, int whichFire) {
+	vector<int> blockWidths;	//chứa blockWidth của các viên gạch
+	vector<int> blockHeights;	//chứa blockHeight của các viên gạch
+	vector<int> index_m_bricks;
+	//	cout << " m_bricks.size() = "<< m_bricks.size()<<"\n";
+	for (int i = 0; i < m_bricks.size(); i++) {	//duyệt từng viên gạch một
+		blockWidths.push_back(getWidthBlock_from_WidthPixel(m_bricks[i]->Get2DPosition().x));
+		blockHeights.push_back(getHeightBlock_from_HeightPixel(m_bricks[i]->Get2DPosition().y));
+		index_m_bricks.push_back(i);
+	}
+	/*
+	for (int i = 0; i < blockWidths.size(); i++) {
+	cout << "blockWidths[" << i << "] = " << blockWidths[i]<<" ";
+	cout << "blockHeights[" << i << "] = " << blockHeights[i] << " ";
+	cout << "index_m_bricks[" << i << "] = " << index_m_bricks[i] << "\n";
+	}
+	*/
+	//tất cả tọa độ theo block của các viên gạch đã được lưu trong blockWidths và blockHeights
+	for (int i = 1; i <= 8; i++) {
+		//ko gặp cỏ mà gặp gạch hoặc đá
+		if (isGrass(pixelWidth, pixelHeight - 50 * i) == false) {	//dù gặp gạch hay gặp đá thì vòng lặp cũng sẽ dừng lại ngay lập tức
+																	//gặp đá thì break luôn (tọa độ block theo cả 2 chiều đều là số chẵn)
+			for (int j = 0; j < blockWidths.size(); j++) {
+				if (getWidthBlock_from_WidthPixel(pixelWidth) == blockWidths[j] && getHeightBlock_from_HeightPixel(pixelHeight - 50 * i) == blockHeights[j]) {
+					//nếu chạm vào gạch thì phá viên gạch đó
+					/*
+					cout << "Số viên gạch trước là = " << m_bricks.size() << "\n";
+					for (int k = 0; k < m_bricks.size(); k++) {
+					cout << "blockWidths[" << k << "] = " << m_bricks[k]->Get2DPosition().x << " ";
+					cout << "blockHeights[" << k << "] = " << m_bricks[k]->Get2DPosition().y << " \n";
+					}*/
+					m_bricks.erase(m_bricks.begin() + index_m_bricks[j]);
+					/*
+					cout << "Số viên gạch sau là = " << m_bricks.size() << "\n";
+					for (int k = 0; k < m_bricks.size(); k++) {
+					cout << "blockWidths[" << k << "] = " << m_bricks[k]->Get2DPosition().x << " ";
+					cout << "blockHeights[" << k << "] = " << m_bricks[k]->Get2DPosition().y << " \n";
+					}*/
+					break;	//phá xong thì break
+				}
+			}
+			//gặp gạch thì phá gạch và break luôn
+			//ko gặp viên gạch nào thì có nghĩa là gặp đá, cũng break luôn
+			break;
+		}
+		//gặp cỏ thì cho đi tiếp
+		auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+		auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/fire");
+		std::shared_ptr<Sprite2D> fireU = std::make_shared<Sprite2D>(model, shader, texture);
+
+		int ROUNDED_widthPixel = getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth));
+		int ROUNDED_heightPixel = getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight - 50 * i));
+
+		if (getWidthBlock_from_WidthPixel(pixelWidth) > 0 && getHeightBlock_from_HeightPixel(pixelHeight - 50 * i) > 0)
+		fireU->Set2DPosition(
+			ROUNDED_widthPixel,	//di chuyển tia lửa sang phải
+			ROUNDED_heightPixel);
+		else fireU->Set2DPosition(0, 0);
+
+
+		fireU->SetSize(50, 50);
+		if (whichFire == 1)
+			m_fires.push_back(fireU);
+		else if (whichFire == 2)
+			m_fires2.push_back(fireU);
+	}
+};
+void GSPlay::ExplodeDown(int pixelWidth, int pixelHeight, int whichFire) {
+	vector<int> blockWidths;	//chứa blockWidth của các viên gạch
+	vector<int> blockHeights;	//chứa blockHeight của các viên gạch
+	vector<int> index_m_bricks;
+	//	cout << " m_bricks.size() = "<< m_bricks.size()<<"\n";
+	for (int i = 0; i < m_bricks.size(); i++) {	//duyệt từng viên gạch một
+		blockWidths.push_back(getWidthBlock_from_WidthPixel(m_bricks[i]->Get2DPosition().x));
+		blockHeights.push_back(getHeightBlock_from_HeightPixel(m_bricks[i]->Get2DPosition().y));
+		index_m_bricks.push_back(i);
+	}
+	/*
+	for (int i = 0; i < blockWidths.size(); i++) {
+	cout << "blockWidths[" << i << "] = " << blockWidths[i]<<" ";
+	cout << "blockHeights[" << i << "] = " << blockHeights[i] << " ";
+	cout << "index_m_bricks[" << i << "] = " << index_m_bricks[i] << "\n";
+	}
+	*/
+	//tất cả tọa độ theo block của các viên gạch đã được lưu trong blockWidths và blockHeights
+	for (int i = 1; i <= 8; i++) {
+		//ko gặp cỏ mà gặp gạch hoặc đá
+		if (isGrass(pixelWidth, pixelHeight + 50 * i) == false) {	//dù gặp gạch hay gặp đá thì vòng lặp cũng sẽ dừng lại ngay lập tức
+																	//gặp đá thì break luôn (tọa độ block theo cả 2 chiều đều là số chẵn)
+			for (int j = 0; j < blockWidths.size(); j++) {
+				if (getWidthBlock_from_WidthPixel(pixelWidth) == blockWidths[j] && getHeightBlock_from_HeightPixel(pixelHeight + 50 * i) == blockHeights[j]) {
+					//nếu chạm vào gạch thì phá viên gạch đó
+					/*
+					cout << "Số viên gạch trước là = " << m_bricks.size() << "\n";
+					for (int k = 0; k < m_bricks.size(); k++) {
+					cout << "blockWidths[" << k << "] = " << m_bricks[k]->Get2DPosition().x << " ";
+					cout << "blockHeights[" << k << "] = " << m_bricks[k]->Get2DPosition().y << " \n";
+					}*/
+					m_bricks.erase(m_bricks.begin() + index_m_bricks[j]);
+					/*
+					cout << "Số viên gạch sau là = " << m_bricks.size() << "\n";
+					for (int k = 0; k < m_bricks.size(); k++) {
+					cout << "blockWidths[" << k << "] = " << m_bricks[k]->Get2DPosition().x << " ";
+					cout << "blockHeights[" << k << "] = " << m_bricks[k]->Get2DPosition().y << " \n";
+					}*/
+					break;	//phá xong thì break
+				}
+			}
+			//gặp gạch thì phá gạch và break luôn
+			//ko gặp viên gạch nào thì có nghĩa là gặp đá, cũng break luôn
+			break;
+		}
+		//gặp cỏ thì cho đi tiếp
+
+		auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+		auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/fire");
+		std::shared_ptr<Sprite2D> fireD = std::make_shared<Sprite2D>(model, shader, texture);
+		
+		int ROUNDED_widthPixel = getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth));
+		int ROUNDED_heightPixel = getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight + 50 * i));
+
+		if (getWidthBlock_from_WidthPixel(pixelWidth) > 0 && getHeightBlock_from_HeightPixel(pixelHeight + 50 * i) > 0)
+		fireD->Set2DPosition(
+			ROUNDED_widthPixel,	//di chuyển tia lửa sang phải
+			ROUNDED_heightPixel);
+		else fireD->Set2DPosition(0, 0);
+		fireD->SetSize(50, 50);
+
+
+		if (whichFire == 1)
+			m_fires.push_back(fireD);
+		else if (whichFire == 2)
+			m_fires2.push_back(fireD);
+	}
+};
+
+bool GSPlay::isGrass(int pixelWidth, int pixelHeight) {
+	if (getWidthBlock_from_WidthPixel(pixelWidth) % 2 == 0 && getHeightBlock_from_HeightPixel(pixelHeight) % 2 == 0) {
+		//cả 2 tọa độ của block đều chia hết cho 2 thì nó là đá
+		//cout<<"pixelHeight = "<< pixelHeight<<"\n";
+		//cout << "getHeightBlock_from_HeightPixel(pixelHeight) = " << getHeightBlock_from_HeightPixel(pixelHeight) << "\n";
+		return false;
+	}
+	for (int i = 0; i < m_bricks.size(); i++) {	//duyệt từng viên gạch một
+		if (getWidthBlock_from_WidthPixel(m_bricks[i]->Get2DPosition().x) == getWidthBlock_from_WidthPixel(pixelWidth)
+			&&
+			getHeightBlock_from_HeightPixel(m_bricks[i]->Get2DPosition().y) == getHeightBlock_from_HeightPixel(pixelHeight))
+			return false;
+	}
+	if (getWidthBlock_from_WidthPixel(pixelWidth) > 27 || getWidthBlock_from_WidthPixel(pixelWidth) < 1) return false;
+	if (getHeightBlock_from_HeightPixel(pixelHeight) > 13 || getHeightBlock_from_HeightPixel(pixelHeight) < 1) return false;
+	return true;
+}
+
+void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
+{
+	static int delta_pixel = 10;
+	double momentX = (buttonDragDrop->Get2DPosition()).x;
+	double momentY = (buttonDragDrop->Get2DPosition()).y;
+	int blockWidth = getWidthBlock_from_WidthPixel(momentX);
+	int blockHeight = getHeightBlock_from_HeightPixel(momentY);
+	//cout << "momentX = " << momentX << " blockWidth = " << blockWidth << " momentY = " << momentY << " blockHeight = " << blockHeight << "\n";
+	
+	//Ấn nút lên thì y giảm, x giữ nguyên nhưng làm tròn theo block
+	if (key == KEY_UP && bIsPressed == true) {
+		if (momentY >= 100
+			&& isGrass(momentX, momentY - 26)
+			) {
+			buttonDragDrop->Set2DPosition(
+				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(momentX)),
+				momentY - delta_pixel);
+			if ((buttonDragDrop->Get2DPosition()).y < 100) {
+				buttonDragDrop->Set2DPosition(
+					momentX,
+					100);
+			}
+		}
+	}
+
+
+	//ấn xuống thì y tăng, x giữ nguyên nhưng làm tròn theo block
+	else if (key == KEY_DOWN && bIsPressed == true) {
+		if (momentY <= 700
+			&& isGrass(momentX, momentY + 25)
+			) {
+			buttonDragDrop->Set2DPosition(
+				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(momentX)),
+				momentY + delta_pixel);
+			if ((buttonDragDrop->Get2DPosition()).y > 700) {
+				buttonDragDrop->Set2DPosition(
+					momentX,
+					700);
+			}
+		}
+	}
+
+
+	//ấn sang trái thì x giảm, y giữ nguyên nhưng làm tròn theo block
+	else if (key == KEY_LEFT && bIsPressed == true) {
+		if (momentX >= 110 
+			&& isGrass(momentX - 26, momentY)
+			) {
+			buttonDragDrop->Set2DPosition(
+				momentX - delta_pixel,
+				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(momentY)));
+			if ((buttonDragDrop->Get2DPosition()).x < 110) {
+				buttonDragDrop->Set2DPosition(
+					110,
+					momentY);
+			}
+		}
+	}
+
+
+	//ấn sang phải thì x tăng, y giữ nguyên nhưng làm tròn theo block
+	else if (key == KEY_RIGHT && bIsPressed == true) {
+		if (momentX <= 1410 
+			&& isGrass(momentX + 25, momentY)
+			) {
+			buttonDragDrop->Set2DPosition(
+				momentX + delta_pixel,
+				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(momentY)));
+			if ((buttonDragDrop->Get2DPosition()).x > 1410) {
+				buttonDragDrop->Set2DPosition(
+					1410,
+					momentY);
+			}
+		}
+	}
+
+
+
+
+	else if (key == VK_SPACE && bIsPressed == true) {	//ấn nút cách để đặt bom
+		double yourPixelWidth = (buttonDragDrop->Get2DPosition()).x;
+		double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
+
+		/*
+		if (bombstatus.empty() == false) {
+			if (bombstatus.front().index == 2) {
+				SetBomb(yourPixelWidth, yourPixelHeight);
+			}
+			else if (bombstatus.front().index == 1) {
+				SetBomb2(yourPixelWidth, yourPixelHeight);
+			}
+		}
+		else {
+			SetBomb(yourPixelWidth, yourPixelHeight);
+		}
+		*/
+		SetBomb(yourPixelWidth, yourPixelHeight);
+	}
+
+	else if (key == VK_SHIFT && bIsPressed == true) {
+		double yourPixelWidth = (buttonDragDrop->Get2DPosition()).x;
+		double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
+		SetBomb2(yourPixelWidth, yourPixelHeight);
+	}
+}
+
+void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)	//ấn chuột
+{
+	for (auto it : m_listButton)
+	{
+		(it)->HandleTouchEvents(x, y, bIsPressed);
+		if ((it)->IsHandle()) break;
+	}
+
+	if (bIsPressed == true && x >= screenWidth - 150 && x <= screenWidth && y >= 5 && y <= 55) {
+		ResourceManagers::GetInstance()->PauseSound("level" + to_string(level));	//ấn nút back thì dừng nhạc
+	}
+}
+
+void GSPlay::EnemiesChangeDirection(float deltaTime) {	//cứ đi vào ô ko phải cỏ hay gạch thì phải đổi hướng
+	if (m_enemies.empty() == false) {
+		for (int i = 0; i < m_enemies.size(); i++) {
+			if (m_enemies_direction[i] == 1) {	//nếu enemy đang đi sang trái mà gặp đá hoặc gạch
+				int rd = rand() % OMEGA;
+				if (isGrass(
+					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)) - 26,
+					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))) == false)
+				{//nếu bên trái enemies không phải là cỏ thì đổi hướng
+					m_enemies_direction[i] = rand() % 4 + 1;	//đổi hướng
+					m_enemies[i]->Set2DPosition(
+						getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
+						getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
+						//xuất phát tại vị trí cũ
+					);
+				}
+				//đổi hướng ngẫu nhiên theo thời gian29 <= deltaTime * 1000 && deltaTime * 1000 <= 47
+				else if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
+					m_enemies_direction[i] = rand() % 4 + 1;
+				}
+			}
+			else if (m_enemies_direction[i] == 2) {////nếu enemy đang đi sang phải mà gặp đá hoặc gạch
+				int rd = rand() % OMEGA;
+				if (isGrass(
+					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)) + 26,
+					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))) == false)
+				{//nếu bên trái enemies không phải là cỏ thì đổi hướng
+					m_enemies_direction[i] = rand() % 4 + 1;	//đổi hướng
+					m_enemies[i]->Set2DPosition(
+						getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
+						getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
+						//xuất phát tại vị trí cũ
+					);
+				}
+				//đổi hướng ngẫu nhiên theo thời gian
+				else if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
+					m_enemies_direction[i] = rand() % 4 + 1;
+				}
+				//đổi hướng ngẫu nhiên theo thời gian
+			}
+			else if (m_enemies_direction[i] == 3) {//nếu enemy đang đi lên trên mà gặp đá hoặc gạch
+				int rd = rand() % OMEGA;
+				if (isGrass(
+					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
+					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y)) - 26) == false)
+				{//nếu bên trái enemies không phải là cỏ thì đổi hướng
+					m_enemies_direction[i] = rand() % 4 + 1;	//đổi hướng
+					m_enemies[i]->Set2DPosition(
+						getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
+						getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
+						//xuất phát tại vị trí cũ
+					);
+				}
+				//đổi hướng theo thời gian
+				else if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
+					m_enemies_direction[i] = rand() % 4 + 1;
+				}
+				//đổi hướng theo thời gian
+			}
+			else if (m_enemies_direction[i] == 4) {//nếu enemy đang đi xuống dưới mà gặp đá hoặc gạch
+				int rd = rand() % OMEGA;
+				if (isGrass(
+					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
+					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y)) + 26) == false)
+				{//nếu bên trái enemies không phải là cỏ thì đổi hướng
+					m_enemies_direction[i] = rand() % 4 + 1;	//đổi hướng
+					m_enemies[i]->Set2DPosition(
+						getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
+						getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
+						//xuất phát tại vị trí cũ
+					);
+				}
+				//đổi hướng theo thời gian
+				else if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
+					m_enemies_direction[i] = rand() % 4 + 1;
+				}
+				//đổi hướng theo thời gian
+			}
+		}
+	}
+}
+
+void GSPlay::EnemiesMoving(float deltaTime) {
+	if (m_enemies.empty() == false) {
+		for (int i = 0; i < m_enemies.size(); i++) {
+			if (m_enemies_direction[i] == 1) {	//trái
+				m_enemies[i]->Set2DPosition(
+					m_enemies[i]->Get2DPosition().x - Venemies[i]*deltaTime * 25,
+					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
+				);
+			}
+			else if (m_enemies_direction[i] == 2) {//phải
+				m_enemies[i]->Set2DPosition(
+					m_enemies[i]->Get2DPosition().x + Venemies[i] *deltaTime * 25,
+					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
+				);
+			}
+			else if (m_enemies_direction[i] == 3) {//lên
+				m_enemies[i]->Set2DPosition(
+					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
+					m_enemies[i]->Get2DPosition().y - Venemies[i] *deltaTime * 25
+				);
+			}
+			else if (m_enemies_direction[i] == 4) {//xuống
+				m_enemies[i]->Set2DPosition(
+					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
+					m_enemies[i]->Get2DPosition().y + Venemies[i] *deltaTime * 25
+				);
+			}
+		}
+	}
+}
+
+void GSPlay::Update(float deltaTime)	//hoạt ảnh chuyển động
+{
+	FinishExplode(deltaTime);
+	FinishBomb(deltaTime);
+	FinishBomb2(deltaTime);
+	FinishExplode2(deltaTime);
+	for (auto it : m_listSpriteAnimations)
+	{
+		it->Update(deltaTime);
+	}
+	for (auto it : m_bombs)
+	{
+		it->Update(deltaTime);
+	}
+	for (auto it : m_bombs2)
+	{
+		it->Update(deltaTime);
+	}
+	for (auto it : m_enemies) {
+		it->Update(deltaTime);
+	}
+	buttonDragDrop->Update(deltaTime);
+	EnemiesMoving(deltaTime);
+	EnemiesChangeDirection(deltaTime);
+	HasBombermanBeenFired(deltaTime);
+	HasEnemiesBeenFired(deltaTime);
+	HasBombermanBeenTouchedByEnemies(deltaTime);
+}
+
+void GSPlay::Draw()	//render lên màn hình
+{
+	m_BackGround->Draw();
+	m_score->Draw();
+	m_coins->Draw();
+	m_level->Draw();
+	for (auto it : m_listButton)
+	{
+		it->Draw();
+	}
+	for (auto it : m_fires)
+	{
+		it->Draw();
+	}
+	for (auto it : m_fires2)
+	{
+		it->Draw();
+	}
+
+	buttonDragDrop->Draw();
+
+	for (auto it : m_listSpriteAnimations)
+	{
+		it->Draw();
+	}
+	for (auto it : m_rocks) {
+		it->Draw();
+	}
+	for (auto it : m_bricks) {
+		it->Draw();
+	}
+	for (auto it : m_bombs) {
+		it->Draw();
+	}
+	for (auto it : m_bombs2) {
+		it->Draw();
+	}
+	for (auto it : m_enemies) {
+		it->Draw();
+	}
+}
+
+void GSPlay::SetBomb2(int pixelWidth, int pixelHeight) {
+	//if (MAXBOMB >= 1) {
+	//	MAXBOMB--;
+		BOMB b; b.index = 2; b.xBlock = getWidthBlock_from_WidthPixel(pixelWidth); b.yBlock = getHeightBlock_from_HeightPixel(pixelHeight);
+		bombstatus.push(b);
+
+		if (hasBomb2BeenFinished == 1) {	//nếu bomb 2 đã nổ rồi hoặc chưa được đặt
+			finishBomb2Time = 4;	//quay thời gian hẹn giờ về 4
+			auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+			auto shader = ResourceManagers::GetInstance()->GetShader("Animation");
+			auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/bomb");
+			std::shared_ptr<SpriteAnimation> bomb = std::make_shared<SpriteAnimation>(model, shader, texture, 2, 1.0f / 30);
+			bomb->Set2DPosition(
+				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth)),
+				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight)));
+			bomb->SetSize(50, 50);
+			m_bombs2.push_back(bomb);
+			hasBomb2BeenFinished = 0;	//đặt rồi thì xem như bom 2 chưa nổ và tính thời gian lại từ đầu
+		}
+	//}
+};	//đặt bom
+void GSPlay::SetExplode2(int pixelWidth, int pixelHeight) {	//bắn tia lửa
+	if (hasFire2BeenFinished == 1) {
+		finishFire2Time = 1;
+		finishBomb2Time = 4;
+		//nổ về 4 phía
+		ExplodeLeft(pixelWidth, pixelHeight, 2);
+		ExplodeRight(pixelWidth, pixelHeight, 2);
+		ExplodeUp(pixelWidth, pixelHeight, 2);
+		ExplodeDown(pixelWidth, pixelHeight, 2);
+		//bom 2 nổ, xem xét vị trí của nó so với bom 1 và trạng thái của bombstatus
+		if (bombstatus.size() == 2) {	//nếu đang có 2 quả bom trên màn hình
+			if (bombstatus.front().index == 2) {	//giả sử bom 2 nổ trước, tác động đến bom 1
+
+
+
+				if (bombstatus.front().xBlock == bombstatus.back().xBlock) {	//cùng 1 cột
+					if (abs(bombstatus.front().yBlock - bombstatus.back().yBlock) <= 8) {
+						//cùng 1 hàng và cách nhau chưa tới 8 theo chiều ngang
+						finishBomb1Time = 0.0000001;
+					}
+				}
+				if (bombstatus.front().yBlock == bombstatus.back().yBlock) {	//cùng 1 hàng
+					if (abs(bombstatus.front().xBlock - bombstatus.back().xBlock) <= 8) {
+						//cùng 1 cột và cách nhau chưa tới 8 theo chiều dọc
+						finishBomb1Time = 0.0000001;
+					}
+				}
+
+
+
+			}
+		}
+		//
+	}
+	hasFire2BeenFinished = 0;
+	//quả bom thứ 2 đã nổ nghĩa là trong túi tăng từ 0 lên 1 quả bom
+	//MAXBOMB++;	//1
+	bombstatus.pop();
+};	//nổ bom+
+void GSPlay::FinishBomb2(float deltaTime) {	//kick nổ bom 2
+
+	if (finishBomb2Time > 0)
+		finishBomb2Time -= 1 * deltaTime;
+	if (finishBomb2Time < 0 && hasBomb2BeenFinished == 0) {	//nếu hết thời gian mà bom chưa nổ thì kick nổ quả bom
+		SetExplode2(m_bombs2[0]->Get2DPosition().x, m_bombs2[0]->Get2DPosition().y);
+		m_bombs2.erase(m_bombs2.begin() + 0);
+		hasBomb2BeenFinished = 1;
+	}
+};	//nổ bom-
+void GSPlay::FinishExplode2(float deltaTime) {
+	//bom 2
+	if (finishFire2Time > 0)	//nếu tia lửa vẫn còn xuất hiện
+		finishFire2Time -= 1 * deltaTime;
+	if (finishFire2Time < 0 && hasFire2BeenFinished == 0) {	//nếu tia lửa đã cháy hết thì ẩn đi
+		finishFire2Time = 0;
+		m_fires2.clear();
+		hasFire2BeenFinished = 1;
+	}
+};	//bom cháy hết
+
+void GSPlay::HasBombermanBeenFired(float deltaTime) {	//kiểm tra xem người chơi có chạm vào tia lửa hay ko
+	if (!m_fires.empty()) {
+		int myPositionBlockWidth = getWidthBlock_from_WidthPixel((buttonDragDrop->Get2DPosition().x));
+		int myPositionBlockHeight = getHeightBlock_from_HeightPixel((buttonDragDrop->Get2DPosition().y));
+		for (int i = 0; i < m_fires.size(); i++) {
+			int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_fires[i]->Get2DPosition().x));
+			int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_fires[i]->Get2DPosition().y));
+			if (myPositionBlockWidth == enemyPositionBlockWidth && myPositionBlockHeight == enemyPositionBlockHeight) {
+				buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((1)), getHeightPixel_from_HeightBlock((1)));
+			}
+		}
+	}
+
+	if (!m_fires2.empty()) {
+		int myPositionBlockWidth = getWidthBlock_from_WidthPixel((buttonDragDrop->Get2DPosition().x));
+		int myPositionBlockHeight = getHeightBlock_from_HeightPixel((buttonDragDrop->Get2DPosition().y));
+		for (int i = 0; i < m_fires2.size(); i++) {
+			int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_fires2[i]->Get2DPosition().x));
+			int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_fires2[i]->Get2DPosition().y));
+			if (myPositionBlockWidth == enemyPositionBlockWidth && myPositionBlockHeight == enemyPositionBlockHeight) {
+				buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((1)), getHeightPixel_from_HeightBlock((1)));
+			}
+		}
+	}
+}
+
+void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có chạm vào tia lửa hay ko
+	if (!m_fires.empty()) {
+		for (int i = 0; i < m_fires.size(); i++) {		//duyệt từng ô fire xem có con enemy nào ở đó ko
+			int firePositionBlockWidth = getWidthBlock_from_WidthPixel((m_fires[i]->Get2DPosition().x));
+			int firePositionBlockHeight = getHeightBlock_from_HeightPixel((m_fires[i]->Get2DPosition().y));
+			for (int enemy_index = 0; enemy_index < m_enemies.size(); enemy_index++) {
+				int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[enemy_index]->Get2DPosition().x));
+				int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[enemy_index]->Get2DPosition().y));
+				if (enemyPositionBlockWidth == firePositionBlockWidth && enemyPositionBlockHeight == firePositionBlockHeight) {
+					cout << "enemy_index = " << enemy_index << "\n";
+					m_enemies[enemy_index]->Set2DPosition(0, 50 * (enemy_index + 1));	//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
+					Venemies[enemy_index] = 0;
+				}
+			}
+		}
+	}
+
+	if (!m_fires2.empty()) {
+		for (int i = 0; i < m_fires2.size(); i++) {		//duyệt từng ô fire2 xem có con enemy nào ở đó ko
+			int firePositionBlockWidth = getWidthBlock_from_WidthPixel((m_fires2[i]->Get2DPosition().x));
+			int firePositionBlockHeight = getHeightBlock_from_HeightPixel((m_fires2[i]->Get2DPosition().y));
+			for (int enemy_index = 0; enemy_index < m_enemies.size(); enemy_index++) {
+				int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[enemy_index]->Get2DPosition().x));
+				int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[enemy_index]->Get2DPosition().y));
+				if (enemyPositionBlockWidth == firePositionBlockWidth && enemyPositionBlockHeight == firePositionBlockHeight) {
+					cout << "enemy_index = " << enemy_index << "\n";
+					m_enemies[enemy_index]->Set2DPosition(0, 50 * (enemy_index + 1));//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
+					Venemies[enemy_index] = 0;
+				}
+			}
+		}
+	}
+}
+
+void GSPlay::HasBombermanBeenTouchedByEnemies(float deltaTime) {//kiểm tra xem người chơi có chạm vào enemies hay ko
+	
+	int myPositionBlockWidth = getWidthBlock_from_WidthPixel((buttonDragDrop->Get2DPosition().x));
+	int myPositionBlockHeight = getHeightBlock_from_HeightPixel((buttonDragDrop->Get2DPosition().y));
+	for (int i = 0; i < m_enemies.size();i++) {
+		int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[i]->Get2DPosition().x));
+		int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[i]->Get2DPosition().y));
+		if (myPositionBlockWidth == enemyPositionBlockWidth && myPositionBlockHeight == enemyPositionBlockHeight) {
+			buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((1)), getHeightPixel_from_HeightBlock((1)));
+		}
+	}
+	
+};
