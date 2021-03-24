@@ -29,6 +29,8 @@ GSPlay::~GSPlay()
 
 }
 
+//1. Chuyển đổi pixel sang các ô và ngược lại
+
 //Chiều ngang: 1350 pixel, 50 pixel/block, 27 block = 14 gạch/cỏ + 13 đá
 int GSPlay::getWidthBlock_from_WidthPixel(int now_WidthPixel) {
 	if (0.5 * (screenWidth - real_screenWidth) <= now_WidthPixel &&
@@ -61,6 +63,7 @@ int GSPlay::getHeightPixel_from_HeightBlock(int now_HeightBlock) {//chiều cao
 		+ 0.5 * (screenHeight - real_screenHeight);
 }
 
+//2. đặt các viên gạch lên màn hình
 void GSPlay::InitBricks() {
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
@@ -77,6 +80,7 @@ void GSPlay::InitBricks() {
 	}
 }
 
+//3. đặt các viên đá lên màn hình
 void GSPlay::InitRocks() {
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
@@ -93,6 +97,8 @@ void GSPlay::InitRocks() {
 	}
 }
 
+
+//4. đặt các enemies lên màn hình
 void GSPlay::InitEnemies() {
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
@@ -186,7 +192,8 @@ void GSPlay::InitEnemies() {
 	cout << "Venemies.size = " << Venemies.size() << "\n";
 }
 
-void GSPlay::Init()
+//5. tương đương với constructor khởi tạo trong java
+void GSPlay::Init()	
 {
 	InitBricks();
 	InitRocks();
@@ -268,6 +275,7 @@ void GSPlay::HandleEvents()
 
 }
 
+//6. hàm check bomb đã nổ chưa
 void GSPlay::FinishBomb(float deltaTime) {
 	if (finishBomb1Time > 0)
 		finishBomb1Time -= 1 * deltaTime;
@@ -280,6 +288,7 @@ void GSPlay::FinishBomb(float deltaTime) {
 
 }
 
+//7. bom nổ xong thì xóa hết fire trên màn hình
 void GSPlay::FinishExplode(float deltaTime) {
 	//bom 1
 	if (finishFireTime > 0)	//nếu tia lửa vẫn còn xuất hiện
@@ -292,6 +301,7 @@ void GSPlay::FinishExplode(float deltaTime) {
 
 }
 
+//8. được gọi khi người dùng click đặt bom
 void GSPlay::SetBomb(int pixelWidth, int pixelHeight) {
 	//if (MAXBOMB >= 1) {
 	//	MAXBOMB--;
@@ -315,6 +325,7 @@ void GSPlay::SetBomb(int pixelWidth, int pixelHeight) {
 	//}
 }
 
+//9. Set các fire lên màn hình
 void GSPlay::SetExplode(int pixelWidth, int pixelHeight) {	//khi bom 1 nổ thì gọi hàm này
 	int blockWidth = getWidthBlock_from_WidthPixel(pixelWidth);
 	int blockHeight = getHeightBlock_from_HeightPixel(pixelHeight);
@@ -628,6 +639,7 @@ void GSPlay::ExplodeDown(int pixelWidth, int pixelHeight, int whichFire) {
 	}
 };
 
+//10. kiểm tra xem nhân vật có được đi vào ô có tọa độ pixelWidth, pixelHeight hay ko
 bool GSPlay::isGrass(int pixelWidth, int pixelHeight) {
 	if (getWidthBlock_from_WidthPixel(pixelWidth) % 2 == 0 && getHeightBlock_from_HeightPixel(pixelHeight) % 2 == 0) {
 		//cả 2 tọa độ của block đều chia hết cho 2 thì nó là đá
@@ -646,6 +658,7 @@ bool GSPlay::isGrass(int pixelWidth, int pixelHeight) {
 	return true;
 }
 
+//11. bắt event ấn các phím điều hướng,...
 void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 {
 	static int delta_pixel = 10;
@@ -752,6 +765,7 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 	}
 }
 
+//12. bắt mouse event
 void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)	//ấn chuột
 {
 	for (auto it : m_listButton)
@@ -765,6 +779,7 @@ void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)	//ấn chuột
 	}
 }
 
+//13. set hướng chuyển động của enemies
 void GSPlay::EnemiesChangeDirection(float deltaTime) {	//cứ đi vào ô ko phải cỏ hay gạch thì phải đổi hướng
 	if (m_enemies.empty() == false) {
 		for (int i = 0; i < m_enemies.size(); i++) {
@@ -847,6 +862,7 @@ void GSPlay::EnemiesChangeDirection(float deltaTime) {	//cứ đi vào ô ko ph�
 	}
 }
 
+//14. set chuyển động theo hướng của enemies
 void GSPlay::EnemiesMoving(float deltaTime) {
 	if (m_enemies.empty() == false) {
 		for (int i = 0; i < m_enemies.size(); i++) {
@@ -1030,6 +1046,7 @@ void GSPlay::FinishExplode2(float deltaTime) {
 	}
 };	//bom cháy hết
 
+//15. kiểm tra xem người chơi có chạm vào tia lửa hay ko
 void GSPlay::HasBombermanBeenFired(float deltaTime) {	//kiểm tra xem người chơi có chạm vào tia lửa hay ko
 	if (!m_fires.empty()) {
 		int myPositionBlockWidth = getWidthBlock_from_WidthPixel((buttonDragDrop->Get2DPosition().x));
@@ -1056,6 +1073,7 @@ void GSPlay::HasBombermanBeenFired(float deltaTime) {	//kiểm tra xem người 
 	}
 }
 
+//16. kiểm tra xem enemies có chạm vào tia lửa hay ko
 void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có chạm vào tia lửa hay ko
 	if (!m_fires.empty()) {
 		for (int i = 0; i < m_fires.size(); i++) {		//duyệt từng ô fire xem có con enemy nào ở đó ko
@@ -1090,6 +1108,7 @@ void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có
 	}
 }
 
+//17. kiểm tra xem người chơi có chạm vào enemies hay ko
 void GSPlay::HasBombermanBeenTouchedByEnemies(float deltaTime) {//kiểm tra xem người chơi có chạm vào enemies hay ko
 	
 	int myPositionBlockWidth = getWidthBlock_from_WidthPixel((buttonDragDrop->Get2DPosition().x));
