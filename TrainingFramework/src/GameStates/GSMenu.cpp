@@ -17,7 +17,7 @@ GSMenu::~GSMenu()
 
 void GSMenu::Init()
 {
-	ResourceManagers::GetInstance()->PlaySound("introduction", true);
+	ResourceManagers::GetInstance()->PlaySound("Level1/TitleScreen", true);
 
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/introduction");
@@ -34,9 +34,9 @@ void GSMenu::Init()
 	button->Set2DPosition(screenWidth / 2, screenHeight * 0.4);
 	button->SetSize(screenWidth * 5.0f/38, screenHeight * 0.0625f);
 	button->SetOnClick([]() {
-		ResourceManagers::GetInstance()->PauseSound("introduction");
+		ResourceManagers::GetInstance()->PauseSound("Level1/TitleScreen");
 
-		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Play);
+		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_StageGameStart);
 	});
 	m_listButton.push_back(button);
 
@@ -46,7 +46,7 @@ void GSMenu::Init()
 	button->Set2DPosition(screenWidth / 2, screenHeight * 0.8);
 	button->SetSize(screenWidth * 5.0f / 38, screenHeight * 0.0625f);
 	button->SetOnClick([]() {
-		ResourceManagers::GetInstance()->PauseSound("introduction");
+		ResourceManagers::GetInstance()->PauseSound("Level1/TitleScreen");
 		exit(0);
 	});
 	m_listButton.push_back(button);

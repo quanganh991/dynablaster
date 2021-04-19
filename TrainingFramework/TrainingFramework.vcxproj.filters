@@ -72,6 +72,9 @@
     <ClCompile Include="..\..\Programming_anim\TrainingFramework\src\GameObject\SpriteAnimation.cpp">
       <Filter>TrainingFramework\src\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameStates\GSStageGameStart.cpp">
+      <Filter>TrainingFramework\src\GameStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Programming_anim\TrainingFramework\src\GameObject\SpriteAnimation.h">
       <Filter>TrainingFramework\src\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameStates\GSStageGameStart.h">
+      <Filter>TrainingFramework\src\GameStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

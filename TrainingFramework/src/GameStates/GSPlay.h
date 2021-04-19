@@ -69,7 +69,8 @@ public:
 	void HandleTouchEvents(int x, int y, bool bIsPressed);
 	void Update(float deltaTime);
 	void Draw();
-	
+	void DiedBomberman(float deltaTime);
+	void PlayAgain(float deltaTime);
 private:
 
 	std::vector<std::shared_ptr<SpriteAnimation>> m_bombs;
@@ -80,12 +81,11 @@ private:
 	std::vector<std::shared_ptr<Sprite2D>> m_bricks;
 	std::vector<std::shared_ptr<Sprite2D>> m_rocks;
 
-
 	std::vector<std::shared_ptr<SpriteAnimation>> m_enemies;
 	std::vector<int> m_enemies_direction;	//hướng di chuyển của enemies, 1 trái, 2 phải, 3 lên, 4 xuống
 	std::vector<int> Venemies;	//Vận tốc của enemies
 
-
+	std::shared_ptr<Sprite2D> m_skull;
 	std::shared_ptr<Sprite2D> m_BackGround;
 	std::shared_ptr<Text>  m_score;
 	std::shared_ptr<Text>  m_coins;
@@ -110,4 +110,5 @@ private:
 	//int MAXBOMB = 2;
 	int level = 1;	//level cũng chính là số bom tối đa cho mỗi lần đặt
 	queue<BOMB> bombstatus;
+	double m_time = 0;
 };

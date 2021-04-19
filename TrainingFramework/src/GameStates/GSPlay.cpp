@@ -198,12 +198,23 @@ void GSPlay::Init()
 	InitBricks();
 	InitRocks();
 	InitEnemies();
+	
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/grass");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 	m_BackGround = std::make_shared<Sprite2D>(model, shader, texture);
 	m_BackGround->Set2DPosition(screenWidth / 2, screenHeight / 2);
 	m_BackGround->SetSize(real_screenWidth, real_screenHeight);
+
+	//Set vị trí skull nằm ngoài màn hình
+	m_skull = std::make_shared<Sprite2D>(
+		ResourceManagers::GetInstance()->GetModel("Sprite2D"),
+		ResourceManagers::GetInstance()->GetShader("TextureShader"),
+		ResourceManagers::GetInstance()->GetTexture("bomberman/bomberman_dead_2")
+		);
+	m_skull->Set2DPosition(getWidthPixel_from_WidthBlock((100)), getHeightPixel_from_HeightBlock((100)));
+	m_skull->SetSize(50, 50);
+	//
 
 	//nút back
 	texture = ResourceManagers::GetInstance()->GetTexture("button_back");
@@ -212,7 +223,8 @@ void GSPlay::Init()
 	button->SetSize(150, 50);
 	button->SetOnClick([]() {
 		GameStateMachine::GetInstance()->PopState();
-		ResourceManagers::GetInstance()->PlaySound("introduction", true);
+		GameStateMachine::GetInstance()->PopState();
+		ResourceManagers::GetInstance()->PlaySound("Level1/TitleScreen", true);
 	});
 	m_listButton.push_back(button);
 	//m_listButton.erase(m_listButton.begin() + chỉ số vector cần xóa);
@@ -250,7 +262,7 @@ void GSPlay::Init()
 	objCoin->SetSize(22, 22);
 	m_listSpriteAnimations.push_back(objCoin);
 	
-	ResourceManagers::GetInstance()->PlaySound("level" + to_string(level) , true);	//true là có lặp lại
+	ResourceManagers::GetInstance()->PlaySound("Level1/LevelBGM1", true);	//true là có lặp lại
 }
 
 void GSPlay::Exit()
@@ -281,6 +293,7 @@ void GSPlay::FinishBomb(float deltaTime) {
 		finishBomb1Time -= 1 * deltaTime;
 	//cout << "finishBomb1Time = " << finishBomb1Time << " hasBomb1BeenFinished = " << hasBomb1BeenFinished << "\n";
 	if (finishBomb1Time < 0 && hasBomb1BeenFinished == 0) {	//nếu hết thời gian mà bom chưa nổ thì kick nổ quả bom
+		ResourceManagers::GetInstance()->PlaySound("exploded", false);
 		SetExplode(m_bombs[0]->Get2DPosition().x, m_bombs[0]->Get2DPosition().y);
 		m_bombs.erase(m_bombs.begin() + 0);
 		hasBomb1BeenFinished = 1;	// xem như bom 1 chưa nổ
@@ -775,7 +788,7 @@ void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)	//ấn chuột
 	}
 
 	if (bIsPressed == true && x >= screenWidth - 150 && x <= screenWidth && y >= 5 && y <= 55) {
-		ResourceManagers::GetInstance()->PauseSound("level" + to_string(level));	//ấn nút back thì dừng nhạc
+		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM1");	//ấn nút back thì dừng nhạc
 	}
 }
 
@@ -915,6 +928,7 @@ void GSPlay::Update(float deltaTime)	//hoạt ảnh chuyển động
 	for (auto it : m_enemies) {
 		it->Update(deltaTime);
 	}
+	PlayAgain(deltaTime);
 	buttonDragDrop->Update(deltaTime);
 	EnemiesMoving(deltaTime);
 	EnemiesChangeDirection(deltaTime);
@@ -929,6 +943,8 @@ void GSPlay::Draw()	//render lên màn hình
 	m_score->Draw();
 	m_coins->Draw();
 	m_level->Draw();
+	m_skull->Draw();
+
 	for (auto it : m_listButton)
 	{
 		it->Draw();
@@ -1030,6 +1046,7 @@ void GSPlay::FinishBomb2(float deltaTime) {	//kick nổ bom 2
 	if (finishBomb2Time > 0)
 		finishBomb2Time -= 1 * deltaTime;
 	if (finishBomb2Time < 0 && hasBomb2BeenFinished == 0) {	//nếu hết thời gian mà bom chưa nổ thì kick nổ quả bom
+		ResourceManagers::GetInstance()->PlaySound("exploded", false);
 		SetExplode2(m_bombs2[0]->Get2DPosition().x, m_bombs2[0]->Get2DPosition().y);
 		m_bombs2.erase(m_bombs2.begin() + 0);
 		hasBomb2BeenFinished = 1;
@@ -1055,7 +1072,9 @@ void GSPlay::HasBombermanBeenFired(float deltaTime) {	//kiểm tra xem người 
 			int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_fires[i]->Get2DPosition().x));
 			int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_fires[i]->Get2DPosition().y));
 			if (myPositionBlockWidth == enemyPositionBlockWidth && myPositionBlockHeight == enemyPositionBlockHeight) {
-				buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((1)), getHeightPixel_from_HeightBlock((1)));
+				//double Last_x = m_fires[i]->Get2DPosition().x;
+				//double Last_y = m_fires[i]->Get2DPosition().y;
+				DiedBomberman(deltaTime);
 			}
 		}
 	}
@@ -1066,8 +1085,9 @@ void GSPlay::HasBombermanBeenFired(float deltaTime) {	//kiểm tra xem người 
 		for (int i = 0; i < m_fires2.size(); i++) {
 			int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_fires2[i]->Get2DPosition().x));
 			int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_fires2[i]->Get2DPosition().y));
+			cout << "enemyPositionBlockWidth = " << enemyPositionBlockWidth << " enemyPositionBlockHeight = " << enemyPositionBlockHeight << "\n";
 			if (myPositionBlockWidth == enemyPositionBlockWidth && myPositionBlockHeight == enemyPositionBlockHeight) {
-				buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((1)), getHeightPixel_from_HeightBlock((1)));
+				DiedBomberman(deltaTime);
 			}
 		}
 	}
@@ -1117,8 +1137,31 @@ void GSPlay::HasBombermanBeenTouchedByEnemies(float deltaTime) {//kiểm tra xem
 		int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[i]->Get2DPosition().x));
 		int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[i]->Get2DPosition().y));
 		if (myPositionBlockWidth == enemyPositionBlockWidth && myPositionBlockHeight == enemyPositionBlockHeight) {
-			buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((1)), getHeightPixel_from_HeightBlock((1)));
+			DiedBomberman(deltaTime);
 		}
 	}
 	
 };
+
+//18. Cho Bomberman biến mất khỏi màn hình khi bị bom nổ hoặc chạm vào tia lửa
+void GSPlay::DiedBomberman(float deltaTime){
+	ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM1");
+	ResourceManagers::GetInstance()->PlaySound("death", false);
+	m_skull->Set2DPosition(buttonDragDrop->Get2DPosition().x, buttonDragDrop->Get2DPosition().y);
+	buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((100)), getHeightPixel_from_HeightBlock((100)));
+	m_time += deltaTime;
+}
+
+//19. Chơi lại màn chơi sau khi chết
+void GSPlay::PlayAgain(float deltaTime) {
+	if (m_time > 0)	//Khi hàm DiedBomberman đc gọi 1 lần thì hàm này sẽ được kích hoạt
+	{
+		m_time += deltaTime;
+		if (m_time > 4.5) {
+			GameStateMachine::GetInstance()->PopState();
+			GameStateMachine::GetInstance()->PopState();
+			GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_StageGameStart);
+			m_time = 0;
+		}
+	}
+}
