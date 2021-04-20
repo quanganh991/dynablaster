@@ -29,7 +29,10 @@ public:
 	void InitBricks();
 	void InitRocks();
 	void InitEnemies();
+	void InitDoor();
+
 	void Exit();
+
 
 	void Pause();
 	void Resume();
@@ -71,6 +74,9 @@ public:
 	void Draw();
 	void DiedBomberman(float deltaTime);
 	void PlayAgain(float deltaTime);
+	void CheckBreakDoor();//Đặt bom vào ô gạch chứa cửa
+	void BreakDoor(int blockWidth, int blockHeight);	//Đặt bom vào cửa là enemies hồi sinh
+	void NextLevel();
 private:
 
 	std::vector<std::shared_ptr<SpriteAnimation>> m_bombs;
@@ -80,7 +86,8 @@ private:
 
 	std::vector<std::shared_ptr<Sprite2D>> m_bricks;
 	std::vector<std::shared_ptr<Sprite2D>> m_rocks;
-
+	std::vector<std::shared_ptr<Sprite2D>> m_borders;
+	std::shared_ptr<Sprite2D> m_door;	//Cửa
 	std::vector<std::shared_ptr<SpriteAnimation>> m_enemies;
 	std::vector<int> m_enemies_direction;	//hướng di chuyển của enemies, 1 trái, 2 phải, 3 lên, 4 xuống
 	std::vector<int> Venemies;	//Vận tốc của enemies
@@ -107,8 +114,11 @@ private:
 	float finishBomb2Time = 4;	//thời gian để bom2 nổ là 4s
 	bool hasBomb2BeenFinished = 1;
 
-	//int MAXBOMB = 2;
 	int level = 1;	//level cũng chính là số bom tối đa cho mỗi lần đặt
+	int doorWidthByBlock;	//Vị trí của cửa theo chiều ngang
+	int doorHeightByBlock;	//Vị trí của cửa theo chiều dọc
+	int HasDoorBeenExplored = 0;	//Kiểm tra xem bomberman đã tìm được cửa chưa
 	queue<BOMB> bombstatus;
 	double m_time = 0;
+	int hasAllEnemiesBeKilled = 0;
 };
