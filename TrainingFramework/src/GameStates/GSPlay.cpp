@@ -10,7 +10,7 @@
 #include "iostream"
 #include "SpriteAnimation.h"
 #define MAX_RD_DELTATIME 90
-#define MIN_RD_DELTATIME 90
+#define MIN_RD_DELTATIME 80
 #define INITIAL_SPEED 6
 #define OMEGA 100
 using namespace std;
@@ -69,14 +69,16 @@ void GSPlay::InitBricks() {
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/brick");
-	for (int i = 9; i <= 21; i += 2) {	//width
-		for (int j = 1; j <= 9; j += 2) {	//height
-			int width_pixel = getWidthPixel_from_WidthBlock(i);	//lấy tâm pixel của block
-			int height_pixel = getHeightPixel_from_HeightBlock(j);	//lấy tâm pixel của block
-			std::shared_ptr<Sprite2D> brick = std::make_shared<Sprite2D>(model, shader, texture);
-			brick->Set2DPosition(width_pixel, height_pixel);
-			brick->SetSize(50, 50);
-			m_bricks.push_back(brick);
+	for (int i = 2; i <= 27; i += 1) {	//width
+		for (int j = 1; j <= 13; j += 1) {	//height
+			if ((i % 2 != 0 || j % 2 != 0) && rand() % 3 == 1) {
+				int width_pixel = getWidthPixel_from_WidthBlock(i);	//lấy tâm pixel của block
+				int height_pixel = getHeightPixel_from_HeightBlock(j);	//lấy tâm pixel của block
+				std::shared_ptr<Sprite2D> brick = std::make_shared<Sprite2D>(model, shader, texture);
+				brick->Set2DPosition(width_pixel, height_pixel);
+				brick->SetSize(50, 50);
+				m_bricks.push_back(brick);
+			}
 		}
 	}
 	int doorPosition = rand() % m_bricks.size();	//vị trí của cửa là 1 số ngẫu nhiên từ 0 đến tổng số viên gạch - 1
@@ -100,14 +102,14 @@ void GSPlay::InitRocks() {
 			m_rocks.push_back(rock);
 		}
 	}
-	for (int i = 5; i <= 23; i++) {	//border chiều ngang, phần trên
+	/*for (int i = 5; i <= 23; i++) {	//border chiều ngang, phần trên
 		int width_pixel = getWidthPixel_from_WidthBlock(i);
 		int height_pixel = getHeightPixel_from_HeightBlock(0);
 		std::shared_ptr<Sprite2D> border = std::make_shared<Sprite2D>(model, shader, ResourceManagers::GetInstance()->GetTexture("bomberman/border"));
 		border->Set2DPosition(width_pixel, height_pixel);
 		border->SetSize(50, 50);
 		m_borders.push_back(border);
-	}
+	}*/
 
 	for (int i = 1; i <= 27; i++) {	//border chiều ngang, phần dưới
 		int width_pixel = getWidthPixel_from_WidthBlock(i);
@@ -145,7 +147,7 @@ void GSPlay::InitEnemies() {
 	//1
 	auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/pig");
 	std::shared_ptr<SpriteAnimation> pig = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	pig->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(11));
+	pig->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(13));
 	pig->SetSize(50, 50);
 	m_enemies.push_back(pig);
 
@@ -153,7 +155,7 @@ void GSPlay::InitEnemies() {
 	//2
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/dog");
 	std::shared_ptr<SpriteAnimation> dog = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	dog->Set2DPosition(getWidthPixel_from_WidthBlock(25), getHeightPixel_from_HeightBlock(11));
+	dog->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(12));
 	dog->SetSize(50, 50);
 	m_enemies.push_back(dog);
 
@@ -161,7 +163,7 @@ void GSPlay::InitEnemies() {
 	//3
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/frog");
 	std::shared_ptr<SpriteAnimation> frog = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	frog->Set2DPosition(getWidthPixel_from_WidthBlock(23), getHeightPixel_from_HeightBlock(11));
+	frog->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(11));
 	frog->SetSize(50, 50);
 	m_enemies.push_back(frog);
 
@@ -169,7 +171,7 @@ void GSPlay::InitEnemies() {
 	//4
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/ghost");
 	std::shared_ptr<SpriteAnimation> ghost = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	ghost->Set2DPosition(getWidthPixel_from_WidthBlock(21), getHeightPixel_from_HeightBlock(11));
+	ghost->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(10));
 	ghost->SetSize(50, 50);
 	m_enemies.push_back(ghost);
 
@@ -177,7 +179,7 @@ void GSPlay::InitEnemies() {
 	//5
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/bear");
 	std::shared_ptr<SpriteAnimation> bear = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	bear->Set2DPosition(getWidthPixel_from_WidthBlock(19), getHeightPixel_from_HeightBlock(11));
+	bear->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(9));
 	bear->SetSize(50, 50);
 	m_enemies.push_back(bear);
 
@@ -185,7 +187,7 @@ void GSPlay::InitEnemies() {
 	//6
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/mushroom");
 	std::shared_ptr<SpriteAnimation> mushroom = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	mushroom->Set2DPosition(getWidthPixel_from_WidthBlock(17), getHeightPixel_from_HeightBlock(11));
+	mushroom->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(8));
 	mushroom->SetSize(50, 50);
 	m_enemies.push_back(mushroom);
 
@@ -193,7 +195,7 @@ void GSPlay::InitEnemies() {
 	//7
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/pagman");
 	std::shared_ptr<SpriteAnimation> pagman = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	pagman->Set2DPosition(getWidthPixel_from_WidthBlock(15), getHeightPixel_from_HeightBlock(11));
+	pagman->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(7));
 	pagman->SetSize(50, 50);
 	m_enemies.push_back(pagman);
 
@@ -201,7 +203,7 @@ void GSPlay::InitEnemies() {
 	//8
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/skull");
 	std::shared_ptr<SpriteAnimation> skull = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	skull->Set2DPosition(getWidthPixel_from_WidthBlock(13), getHeightPixel_from_HeightBlock(11));
+	skull->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(6));
 	skull->SetSize(50, 50);
 	m_enemies.push_back(skull);
 
@@ -209,7 +211,7 @@ void GSPlay::InitEnemies() {
 	//9
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/snake");
 	std::shared_ptr<SpriteAnimation> snake = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	snake->Set2DPosition(getWidthPixel_from_WidthBlock(11), getHeightPixel_from_HeightBlock(11));
+	snake->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(5));
 	snake->SetSize(50, 50);
 	m_enemies.push_back(snake);
 
@@ -217,7 +219,7 @@ void GSPlay::InitEnemies() {
 	//10
 	texture = ResourceManagers::GetInstance()->GetTexture("enemies/coin");
 	std::shared_ptr<SpriteAnimation> coin = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	coin->Set2DPosition(getWidthPixel_from_WidthBlock(9), getHeightPixel_from_HeightBlock(11));
+	coin->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(4));
 	coin->SetSize(50, 50);
 	m_enemies.push_back(coin);
 
@@ -296,13 +298,13 @@ void GSPlay::Init()
 	m_level->Set2DPosition(getWidthPixel_from_WidthBlock(2), getHeightPixel_from_HeightBlock(0));
 	//coins total quantity
 	m_coins = std::make_shared< Text>(shader, font, "x : 0", TEXT_COLOR::PURPLE, 1.0);	//so xu da an duoc
-	m_coins->Set2DPosition(getWidthPixel_from_WidthBlock(25), getHeightPixel_from_HeightBlock(0));
+	m_coins->Set2DPosition(getWidthPixel_from_WidthBlock(6), getHeightPixel_from_HeightBlock(0));
 
 	// Animation đồng xu
 	shader = ResourceManagers::GetInstance()->GetShader("Animation");
 	texture = ResourceManagers::GetInstance()->GetTexture("bomberman/bomberman_dead");
 	std::shared_ptr<SpriteAnimation> objCoin = std::make_shared<SpriteAnimation>(model, shader, texture, 8, 1.0f/4);
-	objCoin->Set2DPosition(getWidthPixel_from_WidthBlock(24) + 20, getHeightPixel_from_HeightBlock(0) - 8);
+	objCoin->Set2DPosition(getWidthPixel_from_WidthBlock(5) + 20, getHeightPixel_from_HeightBlock(0) - 8);
 	objCoin->SetSize(22, 22);
 	m_listSpriteAnimations.push_back(objCoin);
 	
@@ -359,9 +361,7 @@ void GSPlay::FinishExplode(float deltaTime) {
 }
 
 //8. được gọi khi người dùng click đặt bom
-void GSPlay::SetBomb(int pixelWidth, int pixelHeight) {
-	//if (MAXBOMB >= 1) {
-	//	MAXBOMB--;
+void GSPlay::SetBomb(int pixelWidth, int pixelHeight) {	//đặt bomb bằng phím space
 		BOMB b; b.index = 1; b.xBlock = getWidthBlock_from_WidthPixel(pixelWidth); b.yBlock = getHeightBlock_from_HeightPixel(pixelHeight);
 		bombstatus.push(b);
 		int blockWidth = getWidthBlock_from_WidthPixel(pixelWidth);
@@ -379,7 +379,6 @@ void GSPlay::SetBomb(int pixelWidth, int pixelHeight) {
 			m_bombs.push_back(bomb);
 			hasBomb1BeenFinished = 0;
 		}
-	//}
 }
 
 //9. Set các fire lên màn hình
@@ -450,9 +449,9 @@ void GSPlay::ExplodeLeft(int pixelWidth, int pixelHeight, int whichFire) {
 		}
 		//gặp cỏ thì cho đi tiếp
 		auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
-		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+		auto shader = ResourceManagers::GetInstance()->GetShader("Animation");
 		auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/fire");
-		std::shared_ptr<Sprite2D> fireL = std::make_shared<Sprite2D>(model, shader, texture);
+		std::shared_ptr<SpriteAnimation> fireL = std::make_shared<SpriteAnimation>(model, shader, texture, 13, 1.0f / 13);
 		
 		
 		int ROUNDED_widthPixel = getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth - 50 * i));
@@ -508,9 +507,9 @@ void GSPlay::ExplodeRight(int pixelWidth, int pixelHeight, int whichFire) {
 		}
 		//gặp cỏ thì cho đi tiếp
 		auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
-		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+		auto shader = ResourceManagers::GetInstance()->GetShader("Animation");
 		auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/fire");
-		std::shared_ptr<Sprite2D> fireR = std::make_shared<Sprite2D>(model, shader, texture);
+		std::shared_ptr<SpriteAnimation> fireR = std::make_shared<SpriteAnimation>(model, shader, texture, 13, 1.0f / 13);
 
 
 		int ROUNDED_widthPixel = getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth + 50 * i));
@@ -567,9 +566,9 @@ void GSPlay::ExplodeUp(int pixelWidth, int pixelHeight, int whichFire) {
 		}
 		//gặp cỏ thì cho đi tiếp
 		auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
-		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+		auto shader = ResourceManagers::GetInstance()->GetShader("Animation");
 		auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/fire");
-		std::shared_ptr<Sprite2D> fireU = std::make_shared<Sprite2D>(model, shader, texture);
+		std::shared_ptr<SpriteAnimation> fireU = std::make_shared<SpriteAnimation>(model, shader, texture, 13, 1.0f / 13);
 
 		int ROUNDED_widthPixel = getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth));
 		int ROUNDED_heightPixel = getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight - 50 * i));
@@ -625,9 +624,9 @@ void GSPlay::ExplodeDown(int pixelWidth, int pixelHeight, int whichFire) {
 		//gặp cỏ thì cho đi tiếp
 
 		auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
-		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+		auto shader = ResourceManagers::GetInstance()->GetShader("Animation");
 		auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/fire");
-		std::shared_ptr<Sprite2D> fireD = std::make_shared<Sprite2D>(model, shader, texture);
+		std::shared_ptr<SpriteAnimation> fireD = std::make_shared<SpriteAnimation>(model, shader, texture, 13, 1.0f / 13);
 		
 		int ROUNDED_widthPixel = getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth));
 		int ROUNDED_heightPixel = getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight + 50 * i));
@@ -751,15 +750,27 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 
 
 	else if (key == VK_SPACE && bIsPressed == true && bombstatus.size() < 2) {	//ấn nút cách để đặt bom
-		double yourPixelWidth = (buttonDragDrop->Get2DPosition()).x;
-		double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
-		SetBomb(yourPixelWidth, yourPixelHeight);
+		if ((bombstatus.size() == 1 && bombstatus.front().index == 2) || bombstatus.size() == 0){
+			cout << "Dat bomb bang phim space, bombstatus.size() = " << bombstatus.size() << "\n";
+			double yourPixelWidth = (buttonDragDrop->Get2DPosition()).x;
+			double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
+			SetBomb(yourPixelWidth, yourPixelHeight);
+		}
+		else {
+			cout << "Ko dc dat bom bang phim cach, bombstatus.size() = " << bombstatus.size() <<"\n";
+		}
 	}
 
 	else if (key == VK_SHIFT && bIsPressed == true && bombstatus.size() < 2) {
-		double yourPixelWidth = (buttonDragDrop->Get2DPosition()).x;
-		double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
-		SetBomb2(yourPixelWidth, yourPixelHeight);
+		if ((bombstatus.size() == 1 && bombstatus.front().index == 1) || bombstatus.size() == 0) {
+			cout << "Dat bomb bang phim shift, bombstatus.size() = " << bombstatus.size() << "\n";
+			double yourPixelWidth = (buttonDragDrop->Get2DPosition()).x;
+			double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
+			SetBomb2(yourPixelWidth, yourPixelHeight);
+		}
+		else {
+			cout << "Ko dc dat bom bang phim shift, bombstatus.size() = " << bombstatus.size() << "\n";
+		}
 	}
 	if (hasAllEnemiesBeKilled == 1 && bIsPressed == false) {
 		NextLevel();
@@ -792,83 +803,97 @@ void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)	//ấn chuột
 void GSPlay::EnemiesChangeDirection(float deltaTime) {	//cứ đi vào ô ko phải cỏ hay gạch thì phải đổi hướng
 	if (m_enemies.empty() == false) {
 		for (int i = 0; i < m_enemies.size(); i++) {
-			if (m_enemies_direction[i] == 1) {	//nếu enemy đang đi sang trái mà gặp đá hoặc gạch
-				int rd = rand() % OMEGA;	//xác suất đổi hướng là 1%
-				if (isGrass(
+			if (m_enemies_direction[i] == 1) {	//nếu enemy đang đi sang trái
+				if (isGrass(	//mà gặp đá hoặc gạch
 					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)) - 26,
 					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))) == false)
 				{//nếu bên trái enemies không phải là cỏ thì đổi hướng
-					m_enemies_direction[i] = rand() % 4 + 1;	//đổi hướng
-					m_enemies[i]->Set2DPosition(
-						getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
-						getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
-						//xuất phát tại vị trí cũ
-					);
+					ForceChangeDirection(i, m_enemies_direction[i]);
 				}
 				//đổi hướng ngẫu nhiên theo thời gian29 <= deltaTime * 1000 && deltaTime * 1000 <= 47
-				else if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
-					m_enemies_direction[i] = rand() % 4 + 1;
-				}
+				else RandomChangeDirection(i);
 			}
-			else if (m_enemies_direction[i] == 2) {////nếu enemy đang đi sang phải mà gặp đá hoặc gạch
-				int rd = rand() % OMEGA;
-				if (isGrass(
+			else if (m_enemies_direction[i] == 2) {////nếu enemy đang đi sang phải
+				if (isGrass(//mà gặp đá hoặc gạch
 					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)) + 26,
 					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))) == false)
 				{//nếu bên trái enemies không phải là cỏ thì đổi hướng
-					m_enemies_direction[i] = rand() % 4 + 1;	//đổi hướng
-					m_enemies[i]->Set2DPosition(
-						getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
-						getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
-						//xuất phát tại vị trí cũ
-					);
+					ForceChangeDirection(i, m_enemies_direction[i]);
 				}
 				//đổi hướng ngẫu nhiên theo thời gian
-				else if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
-					m_enemies_direction[i] = rand() % 4 + 1;
-				}
+				else RandomChangeDirection(i);
+
 				//đổi hướng ngẫu nhiên theo thời gian
 			}
-			else if (m_enemies_direction[i] == 3) {//nếu enemy đang đi lên trên mà gặp đá hoặc gạch
-				int rd = rand() % OMEGA;
-				if (isGrass(
+			else if (m_enemies_direction[i] == 3) {//nếu enemy đang đi lên trên
+				if (isGrass(// mà gặp đá hoặc gạch
 					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
 					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y)) - 26) == false)
 				{//nếu bên trái enemies không phải là cỏ thì đổi hướng
-					m_enemies_direction[i] = rand() % 4 + 1;	//đổi hướng
-					m_enemies[i]->Set2DPosition(
-						getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
-						getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
-						//xuất phát tại vị trí cũ
-					);
+					ForceChangeDirection(i, m_enemies_direction[i]);
 				}
 				//đổi hướng theo thời gian
-				else if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
-					m_enemies_direction[i] = rand() % 4 + 1;
-				}
+				else RandomChangeDirection(i);
+
 				//đổi hướng theo thời gian
 			}
-			else if (m_enemies_direction[i] == 4) {//nếu enemy đang đi xuống dưới mà gặp đá hoặc gạch
-				int rd = rand() % OMEGA;
-				if (isGrass(
+			else if (m_enemies_direction[i] == 4) {//nếu enemy đang đi xuống dưới
+				if (isGrass(// mà gặp đá hoặc gạch
 					getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
 					getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y)) + 26) == false)
 				{//nếu bên trái enemies không phải là cỏ thì đổi hướng
-					m_enemies_direction[i] = rand() % 4 + 1;	//đổi hướng
-					m_enemies[i]->Set2DPosition(
-						getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[i]->Get2DPosition().x)),
-						getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[i]->Get2DPosition().y))
-						//xuất phát tại vị trí cũ
-					);
+					ForceChangeDirection(i, m_enemies_direction[i]);
 				}
 				//đổi hướng theo thời gian
-				else if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
-					m_enemies_direction[i] = rand() % 4 + 1;
-				}
+				else RandomChangeDirection(i);
+
 				//đổi hướng theo thời gian
 			}
 		}
 	}
+}
+//Đổi hướng ngẫu nhiên theo thời gian
+void GSPlay::RandomChangeDirection(int enemy_index) {
+	if (getWidthBlock_from_WidthPixel(m_enemies[enemy_index]->Get2DPosition().x) % 2 != 0
+		&& getHeightBlock_from_HeightPixel(m_enemies[enemy_index]->Get2DPosition().y) %2 != 0) {	//nếu cả 4 hướng trái phải trên dưới ko phải đá thì mới đổi hướng
+		int rd = rand() % OMEGA;	//xác suất đổi hướng là 1% thôi
+		if (MIN_RD_DELTATIME <= rd && rd <= MAX_RD_DELTATIME) {
+			m_enemies_direction[enemy_index] = rand() % 4 + 1;
+		}
+	}
+}
+//Enemy chạm vào gạch thì đổi hướng ngẫu nhiên 1 trong 3 hướng còn lại
+void GSPlay::ForceChangeDirection(int enemy_index, int old_direction) {
+	int numbers[] = {1, 2, 3};
+	if (old_direction == 1) {	//đang sang trái mà gặp đá, gạch
+		numbers[0] = 2;
+		numbers[1] = 3;
+		numbers[2] = 4;
+	}
+	else if (old_direction == 2) {//đang sang phải mà gặp đá, gạch
+		numbers[0] = 1;
+		numbers[1] = 3;
+		numbers[2] = 4;
+	}
+	else if (old_direction == 3) {//đang lên trên mà gặp đá, gạch
+		numbers[0] = 1;
+		numbers[1] = 2;
+		numbers[2] = 4;
+	}
+	else if (old_direction == 4) {//đang xuống dưới mà gặp đá, gạch
+		numbers[0] = 1;
+		numbers[1] = 2;
+		numbers[2] = 3;
+	}
+	int length = sizeof(numbers) / sizeof(int);
+	int randomNumber = numbers[rand() % length];
+
+	m_enemies_direction[enemy_index] = randomNumber;	//đổi hướng
+	m_enemies[enemy_index]->Set2DPosition(
+		getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(m_enemies[enemy_index]->Get2DPosition().x)),
+		getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(m_enemies[enemy_index]->Get2DPosition().y))
+		//xuất phát tại vị trí cũ
+	);
 }
 
 //14. set chuyển động theo hướng của enemies
@@ -914,6 +939,14 @@ void GSPlay::Update(float deltaTime)	//hoạt ảnh chuyển động
 		it->Update(deltaTime);
 	}
 	for (auto it : m_bombs)
+	{
+		it->Update(deltaTime);
+	}
+	for (auto it : m_fires)
+	{
+		it->Update(deltaTime);
+	}
+	for (auto it : m_fires2)
 	{
 		it->Update(deltaTime);
 	}
@@ -981,8 +1014,6 @@ void GSPlay::Draw()	//render lên màn hình
 }
 
 void GSPlay::SetBomb2(int pixelWidth, int pixelHeight) {
-	//if (MAXBOMB >= 1) {
-	//	MAXBOMB--;
 		BOMB b; b.index = 2; b.xBlock = getWidthBlock_from_WidthPixel(pixelWidth); b.yBlock = getHeightBlock_from_HeightPixel(pixelHeight);
 		bombstatus.push(b);
 
@@ -999,7 +1030,6 @@ void GSPlay::SetBomb2(int pixelWidth, int pixelHeight) {
 			m_bombs2.push_back(bomb);
 			hasBomb2BeenFinished = 0;	//đặt rồi thì xem như bom 2 chưa nổ và tính thời gian lại từ đầu
 		}
-	//}
 };	//đặt bom
 void GSPlay::SetExplode2(int pixelWidth, int pixelHeight) {	//bắn tia lửa
 	if (hasFire2BeenFinished == 1) {	//nếu ko có tia lửa của quả bom số 2 thì bom 2 mới được phép nổ
@@ -1103,8 +1133,9 @@ void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có
 				int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[enemy_index]->Get2DPosition().x));
 				int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[enemy_index]->Get2DPosition().y));
 				if (enemyPositionBlockWidth == firePositionBlockWidth && enemyPositionBlockHeight == firePositionBlockHeight) {
-					m_enemies[enemy_index]->Set2DPosition(0, 50 * (enemy_index + 1));	//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
+					m_enemies[enemy_index]->Set2DPosition(50 * (enemy_index + 9),0);	//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
 					Venemies[enemy_index] = 0;
+					m_coins->setText("x : " + to_string(++killedEnemies));
 				}
 			}
 			if (sumVenemies == 0) { //tất cả enemies đã bị tiêu diệt hết
@@ -1124,8 +1155,9 @@ void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có
 				int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[enemy_index]->Get2DPosition().x));
 				int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[enemy_index]->Get2DPosition().y));
 				if (enemyPositionBlockWidth == firePositionBlockWidth && enemyPositionBlockHeight == firePositionBlockHeight) {
-					m_enemies[enemy_index]->Set2DPosition(0, 50 * (enemy_index + 1));//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
+					m_enemies[enemy_index]->Set2DPosition(50 * (enemy_index + 9), 0);//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
 					Venemies[enemy_index] = 0;
+					m_coins->setText("x : " + to_string(++killedEnemies));
 				}
 			}
 			if (sumVenemies == 0) { //tất cả enemies đã bị tiêu diệt hết

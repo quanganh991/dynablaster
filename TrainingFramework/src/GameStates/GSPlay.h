@@ -13,7 +13,7 @@ class Sprite3D;
 class Text;
 
 typedef struct BOMB {
-	int index;	//1,2
+	int index;	//1,2, 1 là bomb được đặt bằng phím cách, 2 là bomb được đặt bằng phím shift
 	int xBlock;
 	int yBlock;
 } BOMB;
@@ -77,12 +77,14 @@ public:
 	void CheckBreakDoor();//Đặt bom vào ô gạch chứa cửa
 	void BreakDoor(int blockWidth, int blockHeight);	//Đặt bom vào cửa là enemies hồi sinh
 	void NextLevel();
+	void RandomChangeDirection(int enemy_index);
+	void ForceChangeDirection(int enemy_index, int old_direction);
 private:
 
 	std::vector<std::shared_ptr<SpriteAnimation>> m_bombs;
-	std::vector<std::shared_ptr<Sprite2D>> m_fires;
+	std::vector<std::shared_ptr<SpriteAnimation>> m_fires;
 	std::vector<std::shared_ptr<SpriteAnimation>> m_bombs2;	//chứa bom2
-	std::vector<std::shared_ptr<Sprite2D>> m_fires2;	//chứa tia lửa của bom2
+	std::vector<std::shared_ptr<SpriteAnimation>> m_fires2;	//chứa tia lửa của bom2
 
 	std::vector<std::shared_ptr<Sprite2D>> m_bricks;
 	std::vector<std::shared_ptr<Sprite2D>> m_rocks;
@@ -114,6 +116,7 @@ private:
 	float finishBomb2Time = 4;	//thời gian để bom2 nổ là 4s
 	bool hasBomb2BeenFinished = 1;
 
+	int killedEnemies = 0;
 	int level = 1;	//level cũng chính là số bom tối đa cho mỗi lần đặt
 	int doorWidthByBlock;	//Vị trí của cửa theo chiều ngang
 	int doorHeightByBlock;	//Vị trí của cửa theo chiều dọc
