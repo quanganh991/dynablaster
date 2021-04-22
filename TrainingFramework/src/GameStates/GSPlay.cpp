@@ -69,7 +69,7 @@ void GSPlay::InitBricks() {
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/brick");
-	for (int i = 2; i <= 27; i += 1) {	//width
+	for (int i = 2; i <= 26; i += 1) {	//width
 		for (int j = 1; j <= 13; j += 1) {	//height
 			if ((i % 2 != 0 || j % 2 != 0) && rand() % 3 == 1) {
 				int width_pixel = getWidthPixel_from_WidthBlock(i);	//lấy tâm pixel của block
@@ -84,7 +84,24 @@ void GSPlay::InitBricks() {
 	int doorPosition = rand() % m_bricks.size();	//vị trí của cửa là 1 số ngẫu nhiên từ 0 đến tổng số viên gạch - 1
 	doorWidthByBlock = getWidthBlock_from_WidthPixel(m_bricks[doorPosition]->Get2DPosition().x);	//lưu tọa độ theo block của cửa
 	doorHeightByBlock = getHeightBlock_from_HeightPixel(m_bricks[doorPosition]->Get2DPosition().y);
-	cout << "doorWidthByBlock = " << doorWidthByBlock << " doorHeightByBlock " << doorHeightByBlock << "\n";
+	//cout << "doorWidthByBlock = " << doorWidthByBlock << " doorHeightByBlock " << doorHeightByBlock << "\n";
+	
+	int clockPosition = rand() % m_bricks.size();
+	while (doorPosition == clockPosition) {	//chừng nào vị trí của cửa trùng với vị trí của đồng hồ thì cứ lặp lại
+		clockPosition = rand() % m_bricks.size();
+	}
+	//int clockPosition = 0;
+	clockWidthByBlock = getWidthBlock_from_WidthPixel(m_bricks[clockPosition]->Get2DPosition().x);	//lưu tọa độ theo block của đồng hồ
+	clockHeightByBlock = getHeightBlock_from_HeightPixel(m_bricks[clockPosition]->Get2DPosition().y);
+	
+	int shoesPosition = rand() % m_bricks.size();
+	while (shoesPosition == clockPosition) {	//chừng nào vị trí của cửa trùng với vị trí của đồng hồ thì cứ lặp lại
+		shoesPosition = rand() % m_bricks.size();
+	}
+	//int shoesPosition = 1;
+
+	shoesWidthByBlock = getWidthBlock_from_WidthPixel(m_bricks[shoesPosition]->Get2DPosition().x);	//lưu tọa độ theo block của giày
+	shoesHeightByBlock = getHeightBlock_from_HeightPixel(m_bricks[shoesPosition]->Get2DPosition().y);
 }
 
 //3. đặt các viên đá lên màn hình
@@ -102,14 +119,6 @@ void GSPlay::InitRocks() {
 			m_rocks.push_back(rock);
 		}
 	}
-	/*for (int i = 5; i <= 23; i++) {	//border chiều ngang, phần trên
-		int width_pixel = getWidthPixel_from_WidthBlock(i);
-		int height_pixel = getHeightPixel_from_HeightBlock(0);
-		std::shared_ptr<Sprite2D> border = std::make_shared<Sprite2D>(model, shader, ResourceManagers::GetInstance()->GetTexture("bomberman/border"));
-		border->Set2DPosition(width_pixel, height_pixel);
-		border->SetSize(50, 50);
-		m_borders.push_back(border);
-	}*/
 
 	for (int i = 1; i <= 27; i++) {	//border chiều ngang, phần dưới
 		int width_pixel = getWidthPixel_from_WidthBlock(i);
@@ -144,85 +153,13 @@ void GSPlay::InitEnemies() {
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 	
 
-	//1
-	auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/pig");
-	std::shared_ptr<SpriteAnimation> pig = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	pig->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(13));
-	pig->SetSize(50, 50);
-	m_enemies.push_back(pig);
-
-
-	//2
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/dog");
-	std::shared_ptr<SpriteAnimation> dog = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	dog->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(12));
-	dog->SetSize(50, 50);
-	m_enemies.push_back(dog);
-
-
-	//3
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/frog");
-	std::shared_ptr<SpriteAnimation> frog = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	frog->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(11));
-	frog->SetSize(50, 50);
-	m_enemies.push_back(frog);
-
-
-	//4
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/ghost");
-	std::shared_ptr<SpriteAnimation> ghost = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	ghost->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(10));
-	ghost->SetSize(50, 50);
-	m_enemies.push_back(ghost);
-
-
-	//5
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/bear");
-	std::shared_ptr<SpriteAnimation> bear = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	bear->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(9));
-	bear->SetSize(50, 50);
-	m_enemies.push_back(bear);
-
-
-	//6
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/mushroom");
-	std::shared_ptr<SpriteAnimation> mushroom = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	mushroom->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(8));
-	mushroom->SetSize(50, 50);
-	m_enemies.push_back(mushroom);
-
-
-	//7
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/pagman");
-	std::shared_ptr<SpriteAnimation> pagman = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	pagman->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(7));
-	pagman->SetSize(50, 50);
-	m_enemies.push_back(pagman);
-
-
-	//8
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/skull");
-	std::shared_ptr<SpriteAnimation> skull = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	skull->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(6));
-	skull->SetSize(50, 50);
-	m_enemies.push_back(skull);
-
-
-	//9
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/snake");
-	std::shared_ptr<SpriteAnimation> snake = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	snake->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(5));
-	snake->SetSize(50, 50);
-	m_enemies.push_back(snake);
-
-
-	//10
-	texture = ResourceManagers::GetInstance()->GetTexture("enemies/coin");
-	std::shared_ptr<SpriteAnimation> coin = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-	coin->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(4));
-	coin->SetSize(50, 50);
-	m_enemies.push_back(coin);
-
+	for (int i = 0; i < 10; i++) {
+		auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/enemy" + to_string(i));
+		std::shared_ptr<SpriteAnimation> enemy = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+		enemy->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(13-i));
+		enemy->SetSize(50, 50);
+		m_enemies.push_back(enemy);
+	}
 	for (int i = 0; i < m_enemies.size(); i++) {
 		m_enemies_direction.push_back(rand() % 4 + 1);	//khởi tạo hướng đi ngẫu nhiên cho enemy
 		Venemies.push_back(INITIAL_SPEED);	//vận tốc ban đầu của tất cả enemies là 6 pixel/deltaTime
@@ -238,6 +175,24 @@ void GSPlay::InitDoor(){
 	m_door->SetSize(50, 50);
 }
 
+void GSPlay::InitClock() {
+	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/clock");
+	m_clock = std::make_shared<Sprite2D>(model, shader, texture);
+	m_clock->Set2DPosition(getWidthPixel_from_WidthBlock(100), getHeightPixel_from_HeightBlock(100));	//Đồng hồ khởi tạo ở vô cực
+	m_clock->SetSize(140, 140);
+}
+
+void GSPlay::InitShoes() {
+	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/shoes");
+	m_shoes = std::make_shared<Sprite2D>(model, shader, texture);
+	m_shoes->Set2DPosition(getWidthPixel_from_WidthBlock(100), getHeightPixel_from_HeightBlock(100));	//Giày khởi tạo ở vô cực
+	m_shoes->SetSize(50, 100);
+}
+
 //5. tương đương với constructor khởi tạo trong java
 void GSPlay::Init()	
 {
@@ -245,6 +200,8 @@ void GSPlay::Init()
 	InitRocks();
 	InitEnemies();
 	InitDoor();
+	InitClock();
+	InitShoes();
 
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/grass");
@@ -375,7 +332,7 @@ void GSPlay::SetBomb(int pixelWidth, int pixelHeight) {	//đặt bomb bằng ph�
 			bomb->Set2DPosition(
 				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth)),
 				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight)));
-			bomb->SetSize(50, 50);
+			bomb->SetSize(75, 75);
 			m_bombs.push_back(bomb);
 			hasBomb1BeenFinished = 0;
 		}
@@ -439,6 +396,10 @@ void GSPlay::ExplodeLeft(int pixelWidth, int pixelHeight, int whichFire) {
 					//nếu phá vào ô gạch chứa cửa thì cửa xuất hiện
 					if (blockWidths[j] == doorWidthByBlock && blockHeights[j] == doorHeightByBlock)
 						CheckBreakDoor();
+					if (blockWidths[j] == clockWidthByBlock && blockHeights[j] == clockHeightByBlock)
+						CheckBreakClock();
+					if (blockWidths[j] == shoesWidthByBlock && blockHeights[j] == shoesHeightByBlock)
+						CheckBreakShoes();
 					//
 					break;	//phá xong thì break
 				}
@@ -497,6 +458,10 @@ void GSPlay::ExplodeRight(int pixelWidth, int pixelHeight, int whichFire) {
 					//nếu phá vào ô gạch chứa cửa thì cửa xuất hiện
 					if (blockWidths[j] == doorWidthByBlock && blockHeights[j] == doorHeightByBlock)
 						CheckBreakDoor();
+					if (blockWidths[j] == clockWidthByBlock && blockHeights[j] == clockHeightByBlock)
+						CheckBreakClock();
+					if (blockWidths[j] == shoesWidthByBlock && blockHeights[j] == shoesHeightByBlock)
+						CheckBreakShoes();
 					//
 					break;	//phá xong thì break
 				}
@@ -556,6 +521,10 @@ void GSPlay::ExplodeUp(int pixelWidth, int pixelHeight, int whichFire) {
 					//nếu phá vào ô gạch chứa cửa thì cửa xuất hiện
 					if (blockWidths[j] == doorWidthByBlock && blockHeights[j] == doorHeightByBlock)
 						CheckBreakDoor();
+					if (blockWidths[j] == clockWidthByBlock && blockHeights[j] == clockHeightByBlock)
+						CheckBreakClock();
+					if (blockWidths[j] == shoesWidthByBlock && blockHeights[j] == shoesHeightByBlock)
+						CheckBreakShoes();
 					//
 					break;	//phá xong thì break
 				}
@@ -613,6 +582,10 @@ void GSPlay::ExplodeDown(int pixelWidth, int pixelHeight, int whichFire) {
 					//nếu phá vào ô gạch chứa cửa thì cửa xuất hiện
 					if (blockWidths[j] == doorWidthByBlock && blockHeights[j] == doorHeightByBlock)
 						CheckBreakDoor();
+					if (blockWidths[j] == clockWidthByBlock && blockHeights[j] == clockHeightByBlock)
+						CheckBreakClock();
+					if (blockWidths[j] == shoesWidthByBlock && blockHeights[j] == shoesHeightByBlock)
+						CheckBreakShoes();
 					//
 					break;	//phá xong thì break
 				}
@@ -669,23 +642,46 @@ bool GSPlay::isGrass(int pixelWidth, int pixelHeight) {
 }
 
 //11. bắt event ấn các phím điều hướng,...
+void GSPlay::eatClock() {
+	for (int i = 0; i < Venemies.size(); i++) {
+		Venemies[i] = Venemies[i] / 1.5;
+	}
+	m_clock->Set2DPosition(getWidthPixel_from_WidthBlock(100), getHeightPixel_from_HeightBlock(100));
+	ResourceManagers::GetInstance()->PlaySound("eat", false);
+}
+void GSPlay::eatShoes() {
+	delta_pixel = 20;
+	m_shoes->Set2DPosition(getWidthPixel_from_WidthBlock(100), getHeightPixel_from_HeightBlock(100));
+	ResourceManagers::GetInstance()->PlaySound("eat", false);
+}
+
+void GSPlay::eatClockOrShoes(){
+	if (getWidthBlock_from_WidthPixel(buttonDragDrop->Get2DPosition().x) == getWidthBlock_from_WidthPixel(m_clock->Get2DPosition().x)
+		&& getHeightBlock_from_HeightPixel(buttonDragDrop->Get2DPosition().y) == getHeightBlock_from_HeightPixel(m_clock->Get2DPosition().y)) {
+		eatClock();
+	}
+	else if (getWidthBlock_from_WidthPixel(buttonDragDrop->Get2DPosition().x) == getWidthBlock_from_WidthPixel(m_shoes->Get2DPosition().x)
+		&& getHeightBlock_from_HeightPixel(buttonDragDrop->Get2DPosition().y) == getHeightBlock_from_HeightPixel(m_shoes->Get2DPosition().y)) {
+		eatShoes();
+	}
+}
+
 void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 {
-	static int delta_pixel = 10;
 	double momentX = (buttonDragDrop->Get2DPosition()).x;
 	double momentY = (buttonDragDrop->Get2DPosition()).y;
 	int blockWidth = getWidthBlock_from_WidthPixel(momentX);
 	int blockHeight = getHeightBlock_from_HeightPixel(momentY);
-	
 	//Ấn nút lên thì y giảm, x giữ nguyên nhưng làm tròn theo block
 	if (key == KEY_UP && bIsPressed == true) {
 		if (momentY >= 100
 			&& isGrass(momentX, momentY - 26)
-			) {
+			) {	//ấn nút trái thì có thể đi được
 			buttonDragDrop->Set2DPosition(
 				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(momentX)),
 				momentY - delta_pixel);
-			if ((buttonDragDrop->Get2DPosition()).y < 100) {
+			eatClockOrShoes();
+			if ((buttonDragDrop->Get2DPosition()).y < 100) {	//ra ngoài màn hình
 				buttonDragDrop->Set2DPosition(
 					momentX,
 					100);
@@ -703,6 +699,7 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 			buttonDragDrop->Set2DPosition(
 				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(momentX)),
 				momentY + delta_pixel);
+			eatClockOrShoes();
 			if ((buttonDragDrop->Get2DPosition()).y > 700) {
 				buttonDragDrop->Set2DPosition(
 					momentX,
@@ -721,6 +718,7 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 			buttonDragDrop->Set2DPosition(
 				momentX - delta_pixel,
 				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(momentY)));
+			eatClockOrShoes();
 			if ((buttonDragDrop->Get2DPosition()).x < 110) {
 				buttonDragDrop->Set2DPosition(
 					110,
@@ -738,6 +736,7 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 			buttonDragDrop->Set2DPosition(
 				momentX + delta_pixel,
 				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(momentY)));
+			eatClockOrShoes();
 			if ((buttonDragDrop->Get2DPosition()).x > 1410) {
 				buttonDragDrop->Set2DPosition(
 					1410,
@@ -756,9 +755,6 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 			double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
 			SetBomb(yourPixelWidth, yourPixelHeight);
 		}
-		else {
-			cout << "Ko dc dat bom bang phim cach, bombstatus.size() = " << bombstatus.size() <<"\n";
-		}
 	}
 
 	else if (key == VK_SHIFT && bIsPressed == true && bombstatus.size() < 2) {
@@ -768,13 +764,11 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 			double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
 			SetBomb2(yourPixelWidth, yourPixelHeight);
 		}
-		else {
-			cout << "Ko dc dat bom bang phim shift, bombstatus.size() = " << bombstatus.size() << "\n";
-		}
 	}
 	if (hasAllEnemiesBeKilled == 1 && bIsPressed == false) {
 		NextLevel();
 	}
+
 }
 
 //12. bắt mouse event
@@ -973,6 +967,8 @@ void GSPlay::Draw()	//render lên màn hình
 	m_skull->Draw();
 	m_door->Draw();
 	m_score->Draw();
+	m_shoes->Draw();
+	m_clock->Draw();
 	m_level->Draw();
 	for (auto it : m_listButton)
 	{
@@ -1026,7 +1022,7 @@ void GSPlay::SetBomb2(int pixelWidth, int pixelHeight) {
 			bomb->Set2DPosition(
 				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(pixelWidth)),
 				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(pixelHeight)));
-			bomb->SetSize(50, 50);
+			bomb->SetSize(75, 75);
 			m_bombs2.push_back(bomb);
 			hasBomb2BeenFinished = 0;	//đặt rồi thì xem như bom 2 chưa nổ và tính thời gian lại từ đầu
 		}
@@ -1136,6 +1132,10 @@ void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có
 					m_enemies[enemy_index]->Set2DPosition(50 * (enemy_index + 9),0);	//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
 					Venemies[enemy_index] = 0;
 					m_coins->setText("x : " + to_string(++killedEnemies));
+					if (Venemies[0] < INITIAL_SPEED) {
+						recoverVEnemies();
+					}
+
 				}
 			}
 			if (sumVenemies == 0) { //tất cả enemies đã bị tiêu diệt hết
@@ -1158,6 +1158,9 @@ void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có
 					m_enemies[enemy_index]->Set2DPosition(50 * (enemy_index + 9), 0);//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
 					Venemies[enemy_index] = 0;
 					m_coins->setText("x : " + to_string(++killedEnemies));
+					if (Venemies[0] < INITIAL_SPEED) {
+						recoverVEnemies();
+					}
 				}
 			}
 			if (sumVenemies == 0) { //tất cả enemies đã bị tiêu diệt hết
@@ -1166,6 +1169,14 @@ void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có
 			else hasAllEnemiesBeKilled = 0;	//vẫn còn enemies trên màn hình
 		}
 	}
+}
+
+void GSPlay::recoverVEnemies(){
+		for (int i = 0; i < Venemies.size(); i++) {
+			if (Venemies[i] != 0) {
+				Venemies[i] = INITIAL_SPEED;
+			}
+		}
 }
 
 //17. kiểm tra xem người chơi có chạm vào enemies hay ko
@@ -1186,7 +1197,6 @@ void GSPlay::HasBombermanBeenTouchedByEnemies(float deltaTime) {//kiểm tra xem
 
 //18. Cho Bomberman biến mất khỏi màn hình khi bị bom nổ hoặc chạm vào tia lửa
 void GSPlay::DiedBomberman(float deltaTime){
-	cout << "Died\n";
 	ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM1");
 	ResourceManagers::GetInstance()->PlaySound("death", false);
 	m_skull->Set2DPosition(buttonDragDrop->Get2DPosition().x, buttonDragDrop->Get2DPosition().y);
@@ -1216,12 +1226,28 @@ void GSPlay::CheckBreakDoor() {
 	}
 }
 
+void GSPlay::CheckBreakClock() {
+	if (HasClockBeenExplored == 0) {	//nếu đồng hồ chưa được tìm ra
+		cout << "Đã tìm thấy đồng hồ\n";
+		m_clock->Set2DPosition(getWidthPixel_from_WidthBlock(clockWidthByBlock), getHeightPixel_from_HeightBlock(clockHeightByBlock));
+		HasClockBeenExplored = 1;
+	}
+}
+
+void GSPlay::CheckBreakShoes() {
+	if (HasShoesBeenExplored == 0) {	//nếu giày chưa được tìm ra
+		cout << "Đã tìm thấy giày\n";
+		m_shoes->Set2DPosition(getWidthPixel_from_WidthBlock(shoesWidthByBlock), getHeightPixel_from_HeightBlock(shoesHeightByBlock));
+		HasShoesBeenExplored = 1;
+	}
+}
+
 //21. Đặt bom vào cửa là enemies hồi sinh
 void GSPlay::BreakDoor(int blockWidth, int blockHeight) {
 	for (int i = 0; i < Venemies.size(); i++) {
 		if (Venemies[i] == 0) {	//hồi sinh những enemies đã bị tiêu diệt
 			Venemies[i] = INITIAL_SPEED;
-			m_enemies[i]->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(13));
+			//m_enemies[i]->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(13));
 		}
 	}
 }

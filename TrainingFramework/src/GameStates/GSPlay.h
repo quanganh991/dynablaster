@@ -30,6 +30,8 @@ public:
 	void InitRocks();
 	void InitEnemies();
 	void InitDoor();
+	void InitClock();
+	void InitShoes();
 
 	void Exit();
 
@@ -75,10 +77,14 @@ public:
 	void DiedBomberman(float deltaTime);
 	void PlayAgain(float deltaTime);
 	void CheckBreakDoor();//Đặt bom vào ô gạch chứa cửa
+	void CheckBreakClock(); void eatClock();
+	void CheckBreakShoes(); void eatShoes();
+	void eatClockOrShoes();
 	void BreakDoor(int blockWidth, int blockHeight);	//Đặt bom vào cửa là enemies hồi sinh
 	void NextLevel();
 	void RandomChangeDirection(int enemy_index);
 	void ForceChangeDirection(int enemy_index, int old_direction);
+	void recoverVEnemies();
 private:
 
 	std::vector<std::shared_ptr<SpriteAnimation>> m_bombs;
@@ -90,6 +96,8 @@ private:
 	std::vector<std::shared_ptr<Sprite2D>> m_rocks;
 	std::vector<std::shared_ptr<Sprite2D>> m_borders;
 	std::shared_ptr<Sprite2D> m_door;	//Cửa
+	std::shared_ptr<Sprite2D> m_clock;
+	std::shared_ptr<Sprite2D> m_shoes;
 	std::vector<std::shared_ptr<SpriteAnimation>> m_enemies;
 	std::vector<int> m_enemies_direction;	//hướng di chuyển của enemies, 1 trái, 2 phải, 3 lên, 4 xuống
 	std::vector<int> Venemies;	//Vận tốc của enemies
@@ -121,7 +129,16 @@ private:
 	int doorWidthByBlock;	//Vị trí của cửa theo chiều ngang
 	int doorHeightByBlock;	//Vị trí của cửa theo chiều dọc
 	int HasDoorBeenExplored = 0;	//Kiểm tra xem bomberman đã tìm được cửa chưa
+
+	int clockWidthByBlock;	//Vị trí của đồng hồ theo chiều ngang
+	int clockHeightByBlock;	//Vị trí của đồng hồ theo chiều dọc
+	int HasClockBeenExplored = 0;	//Kiểm tra xem bomberman đã tìm được đồng hồ chưa
+
+	int shoesWidthByBlock;	//Vị trí của giày theo chiều ngang
+	int shoesHeightByBlock;	//Vị trí của giày theo chiều dọc
+	int HasShoesBeenExplored = 0;	//Kiểm tra xem bomberman đã tìm được giày chưa
 	queue<BOMB> bombstatus;
 	double m_time = 0;
 	int hasAllEnemiesBeKilled = 0;
+	int delta_pixel = 10;
 };
