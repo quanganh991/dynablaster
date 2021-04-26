@@ -85,6 +85,7 @@ public:
 	void RandomChangeDirection(int enemy_index);
 	void ForceChangeDirection(int enemy_index, int old_direction);
 	void recoverVEnemies();
+	int GetLevel();
 private:
 
 	std::vector<std::shared_ptr<SpriteAnimation>> m_bombs;
@@ -125,7 +126,7 @@ private:
 	bool hasBomb2BeenFinished = 1;
 
 	int killedEnemies = 0;
-	int level = 1;	//level cũng chính là số bom tối đa cho mỗi lần đặt
+	int level = 1;
 	int doorWidthByBlock;	//Vị trí của cửa theo chiều ngang
 	int doorHeightByBlock;	//Vị trí của cửa theo chiều dọc
 	int HasDoorBeenExplored = 0;	//Kiểm tra xem bomberman đã tìm được cửa chưa

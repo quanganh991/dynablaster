@@ -19,8 +19,9 @@ public:
 	void HandleTouchEvents(int x, int y, bool bIsPressed);
 	void Update(float deltaTime);
 	void Draw();
-
+	int GetLevel();
 private:
+	int level = 1;
 	std::shared_ptr<Sprite2D> m_logo;
 	float m_time;
 };

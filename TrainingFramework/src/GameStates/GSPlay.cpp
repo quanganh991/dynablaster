@@ -9,6 +9,7 @@
 #include "Text.h"
 #include "iostream"
 #include "SpriteAnimation.h"
+#include "fstream"
 #define MAX_RD_DELTATIME 90
 #define MIN_RD_DELTATIME 80
 #define INITIAL_SPEED 6
@@ -69,8 +70,8 @@ void GSPlay::InitBricks() {
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/brick");
-	for (int i = 2; i <= 26; i += 1) {	//width
-		for (int j = 1; j <= 13; j += 1) {	//height
+	for (int i = 1; i <= 27; i += 1) {	//width
+		for (int j = 2; j <= 12; j += 1) {	//height
 			if ((i % 2 != 0 || j % 2 != 0) && rand() % 3 == 1) {
 				int width_pixel = getWidthPixel_from_WidthBlock(i);	//lấy tâm pixel của block
 				int height_pixel = getHeightPixel_from_HeightBlock(j);	//lấy tâm pixel của block
@@ -154,9 +155,9 @@ void GSPlay::InitEnemies() {
 	
 
 	for (int i = 0; i < 10; i++) {
-		auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/enemy" + to_string(i));
+		auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/enemy" + to_string((i%4) + 3*(level - 1)));
 		std::shared_ptr<SpriteAnimation> enemy = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
-		enemy->Set2DPosition(getWidthPixel_from_WidthBlock(27), getHeightPixel_from_HeightBlock(13-i));
+		enemy->Set2DPosition(getWidthPixel_from_WidthBlock(27 - i), getHeightPixel_from_HeightBlock(13));
 		enemy->SetSize(50, 50);
 		m_enemies.push_back(enemy);
 	}
@@ -172,7 +173,7 @@ void GSPlay::InitDoor(){
 	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/door");
 	m_door = std::make_shared<Sprite2D>(model, shader, texture);
 	m_door->Set2DPosition(getWidthPixel_from_WidthBlock(100), getHeightPixel_from_HeightBlock(100));	//Cửa khởi tạo ở vô cực
-	m_door->SetSize(50, 50);
+	m_door->SetSize(90, 55);
 }
 
 void GSPlay::InitClock() {
@@ -193,9 +194,30 @@ void GSPlay::InitShoes() {
 	m_shoes->SetSize(50, 100);
 }
 
+int GSPlay::GetLevel() {
+	std::ifstream fileInput("C:\\Users\\dell\\Desktop\\Programming_anim\\TrainingFramework\\src\\GameStates\\level.txt");
+
+	if (fileInput.fail())
+	{
+		std::cout << "Failed to open this file!" << std::endl;
+		return -1;
+	}
+	while (!fileInput.eof())
+	{
+		int n;
+		fileInput >> n;
+		std::cout <<"n = "<< n << "\n";
+		level = n;
+	}
+	std::cout << std::endl;
+
+	fileInput.close();
+}
+
 //5. tương đương với constructor khởi tạo trong java
 void GSPlay::Init()	
 {
+	GetLevel();
 	InitBricks();
 	InitRocks();
 	InitEnemies();
@@ -204,7 +226,7 @@ void GSPlay::Init()
 	InitShoes();
 
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/grass");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("bomberman/background"+to_string(level));
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 	m_BackGround = std::make_shared<Sprite2D>(model, shader, texture);
 	m_BackGround->Set2DPosition(screenWidth / 2, screenHeight / 2);
@@ -265,7 +287,7 @@ void GSPlay::Init()
 	objCoin->SetSize(22, 22);
 	m_listSpriteAnimations.push_back(objCoin);
 	
-	ResourceManagers::GetInstance()->PlaySound("Level1/LevelBGM1", true);	//true là có lặp lại
+	ResourceManagers::GetInstance()->PlaySound("Level1/LevelBGM"+to_string(level), true);	//true là có lặp lại
 }
 
 void GSPlay::Exit()
@@ -781,7 +803,7 @@ void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)	//ấn chuột
 	}
 
 	if (bIsPressed == true && x >= screenWidth - 150 && x <= screenWidth && y >= 5 && y <= 55) {
-		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM1");	//ấn nút back thì dừng nhạc
+		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM" + to_string(level));	//ấn nút back thì dừng nhạc
 	}
 
 	if (bIsPressed == true && hasAllEnemiesBeKilled == 1 
@@ -1197,7 +1219,7 @@ void GSPlay::HasBombermanBeenTouchedByEnemies(float deltaTime) {//kiểm tra xem
 
 //18. Cho Bomberman biến mất khỏi màn hình khi bị bom nổ hoặc chạm vào tia lửa
 void GSPlay::DiedBomberman(float deltaTime){
-	ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM1");
+	ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM" + to_string(level));
 	ResourceManagers::GetInstance()->PlaySound("death", false);
 	m_skull->Set2DPosition(buttonDragDrop->Get2DPosition().x, buttonDragDrop->Get2DPosition().y);
 	buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((100)), getHeightPixel_from_HeightBlock((100)));
@@ -1255,7 +1277,7 @@ void GSPlay::BreakDoor(int blockWidth, int blockHeight) {
 //22. Diệt hết enemies, vào cửa để sang stage tiếp theo
 void GSPlay::NextLevel() {
 	if (getWidthBlock_from_WidthPixel(buttonDragDrop->Get2DPosition().x) == doorWidthByBlock && getHeightBlock_from_HeightPixel(buttonDragDrop->Get2DPosition().y) == doorHeightByBlock) {
-		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM1");	//vào cửa thì dừng nhạc
+		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM" + to_string(level));	//vào cửa thì dừng nhạc
 		ResourceManagers::GetInstance()->PlaySound("stage_clear");
 	}
 }

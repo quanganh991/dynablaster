@@ -1,9 +1,9 @@
 #include "GSStageGameStart.h"
-
-
+#include <iostream>
+#include <fstream>
 extern int screenWidth; //need get on Graphic engine
 extern int screenHeight; //need get on Graphic engine
-
+using namespace std;
 
 GSStageGameStart::GSStageGameStart()
 {
@@ -15,13 +15,32 @@ GSStageGameStart::~GSStageGameStart()
 {
 }
 
+int GSStageGameStart::GetLevel() {
+		std::ifstream fileInput("C:\\Users\\dell\\Desktop\\Programming_anim\\TrainingFramework\\src\\GameStates\\level.txt");
+
+		if (fileInput.fail())
+		{
+			std::cout << "Failed to open this file!" << std::endl;
+			return -1;
+		}
+		while (!fileInput.eof())
+		{
+			int n;
+			fileInput >> n;
+			std::cout << "n = " << n << "\n";
+			level = n;
+		}
+		std::cout << std::endl;
+
+		fileInput.close();
+}
 
 void GSStageGameStart::Init()
 {
-
+	GetLevel();
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("stage_game_start/stage1");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("stage_game_start/stage"+to_string(level));
 
 	m_logo = std::make_shared<Sprite2D>(model, shader, texture);
 	m_logo->Set2DPosition(screenWidth / 2, screenHeight / 2);
