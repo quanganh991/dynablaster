@@ -1,158 +1,123 @@
-﻿  GSPlay.cpp
-src\GameStates\GSPlay.cpp(60): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(65): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(79): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(86): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(87): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(95): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(96): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(104): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(105): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(118): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(128): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(136): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(144): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(160): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(164): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(175): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(184): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(193): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(232): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(241): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(248): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(265): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(273): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(277): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(280): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(286): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(322): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(356): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(381): warning C4305: '=': truncation from 'double' to 'float'
-src\GameStates\GSPlay.cpp(387): warning C4305: '=': truncation from 'double' to 'float'
-src\GameStates\GSPlay.cpp(404): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(405): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(406): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(414): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(446): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(466): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(467): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(468): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(476): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(508): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(529): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(530): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(531): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(539): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(570): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(590): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(591): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(592): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(600): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(632): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(655): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(656): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(658): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(668): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(669): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(671): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(676): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(681): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(682): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(685): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(686): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(695): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(696): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(700): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(703): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(704): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(704): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(709): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(719): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(722): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(723): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(723): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(728): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(738): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(742): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(742): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(742): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(747): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(756): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(760): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(760): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(760): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(765): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(778): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(787): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(821): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(824): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(825): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(834): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(835): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(846): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(847): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(858): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(859): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(873): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(874): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(909): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(910): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(912): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(918): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(922): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(923): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(928): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(929): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(933): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(935): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(939): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(941): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(1046): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(1070): warning C4305: '=': truncation from 'double' to 'float'
-src\GameStates\GSPlay.cpp(1076): warning C4305: '=': truncation from 'double' to 'float'
-src\GameStates\GSPlay.cpp(1097): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1116): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1117): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1118): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1119): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1120): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1129): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1130): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1131): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1132): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1133): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1145): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1146): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1147): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1149): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1151): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1152): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1154): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(1171): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1172): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1173): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1175): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1177): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1178): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1180): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(1197): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1207): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1208): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1209): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1210): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1211): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
-src\GameStates\GSPlay.cpp(1225): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(1246): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(1253): warning C4566: character represented by universal-character-name '\u0110' cannot be represented in the current code page (1252)
-src\GameStates\GSPlay.cpp(1253): warning C4566: character represented by universal-character-name '\u1EA5' cannot be represented in the current code page (1252)
-src\GameStates\GSPlay.cpp(1253): warning C4566: character represented by universal-character-name '\u0111' cannot be represented in the current code page (1252)
-src\GameStates\GSPlay.cpp(1253): warning C4566: character represented by universal-character-name '\u1ED3' cannot be represented in the current code page (1252)
-src\GameStates\GSPlay.cpp(1254): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(1261): warning C4566: character represented by universal-character-name '\u0110' cannot be represented in the current code page (1252)
-src\GameStates\GSPlay.cpp(1261): warning C4566: character represented by universal-character-name '\u1EA5' cannot be represented in the current code page (1252)
-src\GameStates\GSPlay.cpp(1262): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-src\GameStates\GSPlay.cpp(1269): warning C4018: '<': signed/unsigned mismatch
-src\GameStates\GSPlay.cpp(1279): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+﻿  GSBattle.cpp
+src\GameStates\GSBattle.cpp(60): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(65): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(79): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(88): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(89): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(102): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(112): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(120): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(128): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(141): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(156): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(160): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(164): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(168): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(172): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(176): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(185): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(192): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(209): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(217): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(224): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(228): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(234): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(270): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(304): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(329): warning C4305: '=': truncation from 'double' to 'float'
+src\GameStates\GSBattle.cpp(335): warning C4305: '=': truncation from 'double' to 'float'
+src\GameStates\GSBattle.cpp(352): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(353): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(354): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(362): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(389): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(405): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(406): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(407): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(415): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(443): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(460): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(461): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(462): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(470): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(497): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(513): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(514): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(515): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(523): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(551): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(570): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(571): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(573): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(583): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(584): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(586): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(589): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(590): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(591): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(604): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(607): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(608): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(608): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(613): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(623): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(626): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(627): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(627): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(632): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(642): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(646): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(646): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(646): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(651): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(660): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(664): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(664): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(664): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(669): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(680): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(706): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(709): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(710): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(710): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(715): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(725): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(728): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(729): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(729): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(734): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(744): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(748): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(748): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(748): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(753): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(762): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(766): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(766): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(766): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(771): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(780): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(878): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(902): warning C4305: '=': truncation from 'double' to 'float'
+src\GameStates\GSBattle.cpp(908): warning C4305: '=': truncation from 'double' to 'float'
+src\GameStates\GSBattle.cpp(929): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(948): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(949): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(950): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(951): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(952): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(953): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(954): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(966): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(967): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(968): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(969): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(970): warning C4018: '<': signed/unsigned mismatch
+src\GameStates\GSBattle.cpp(971): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(972): warning C4244: 'argument': conversion from 'GLfloat' to 'int', possible loss of data
+src\GameStates\GSBattle.cpp(990): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(997): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+src\GameStates\GSBattle.cpp(1018): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
 C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\memory(901): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\memory(971): note: see reference to function template instantiation 'std::_Ref_count_obj<_Ty>::_Ref_count_obj<std::shared_ptr<Shaders>&,std::shared_ptr<Font>&,const char(&)[9],TEXT_COLOR,double>(std::shared_ptr<Shaders> &,std::shared_ptr<Font> &,const char (&)[9],TEXT_COLOR &&,double &&)' being compiled
           with
@@ -164,12 +129,12 @@ C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\memory(901): warn
           [
               _Ty=Text
           ]
-  src\GameStates\GSPlay.cpp(272): note: see reference to function template instantiation 'std::shared_ptr<Text> std::make_shared<Text,std::shared_ptr<Shaders>&,std::shared_ptr<Font>&,const char(&)[9],TEXT_COLOR,double>(std::shared_ptr<Shaders> &,std::shared_ptr<Font> &,const char (&)[9],TEXT_COLOR &&,double &&)' being compiled
+  src\GameStates\GSBattle.cpp(223): note: see reference to function template instantiation 'std::shared_ptr<Text> std::make_shared<Text,std::shared_ptr<Shaders>&,std::shared_ptr<Font>&,const char(&)[9],TEXT_COLOR,double>(std::shared_ptr<Shaders> &,std::shared_ptr<Font> &,const char (&)[9],TEXT_COLOR &&,double &&)' being compiled
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  1 of 2251 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 2413 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   TrainingFramework.vcxproj -> C:\Users\dell\Desktop\Programming_anim\\BIN-Nvidia\TrainingFramework.exe
   TrainingFramework.vcxproj -> C:\Users\dell\Desktop\Programming_anim\\BIN-Nvidia\TrainingFramework.pdb (Full PDB)
