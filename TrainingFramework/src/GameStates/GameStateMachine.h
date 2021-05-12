@@ -13,6 +13,8 @@ enum StateTypes
 	STATE_Play,
 	STATE_StageGameStart,
 	STATE_Battle,
+	STATE_BattleGameStart,
+	STATE_BattleResult
 };
 
 class GameStateMachine : public CSingleton<GameStateMachine>

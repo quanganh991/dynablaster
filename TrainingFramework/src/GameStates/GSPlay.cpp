@@ -85,7 +85,6 @@ void GSPlay::InitBricks() {
 	int doorPosition = rand() % m_bricks.size();	//vị trí của cửa là 1 số ngẫu nhiên từ 0 đến tổng số viên gạch - 1
 	doorWidthByBlock = getWidthBlock_from_WidthPixel(m_bricks[doorPosition]->Get2DPosition().x);	//lưu tọa độ theo block của cửa
 	doorHeightByBlock = getHeightBlock_from_HeightPixel(m_bricks[doorPosition]->Get2DPosition().y);
-	//cout << "doorWidthByBlock = " << doorWidthByBlock << " doorHeightByBlock " << doorHeightByBlock << "\n";
 	
 	int clockPosition = rand() % m_bricks.size();
 	while (doorPosition == clockPosition) {	//chừng nào vị trí của cửa trùng với vị trí của đồng hồ thì cứ lặp lại
@@ -206,10 +205,8 @@ int GSPlay::GetLevel() {
 	{
 		int n;
 		fileInput >> n;
-		std::cout <<"n = "<< n << "\n";
 		level = n;
 	}
-	std::cout << std::endl;
 
 	fileInput.close();
 }
@@ -258,12 +255,12 @@ void GSPlay::Init()
 	//bomberman
 	shader = ResourceManagers::GetInstance()->GetShader("Animation");
 	texture = ResourceManagers::GetInstance()->GetTexture("bomberman/bomberman_running");
-	buttonDragDrop = std::make_shared<SpriteAnimation>(model, shader, texture, 12, 1.0f/30);
-	buttonDragDrop->Set2DPosition(
+	bomberman = std::make_shared<SpriteAnimation>(model, shader, texture, 12, 1.0f/30);
+	bomberman->Set2DPosition(
 		getWidthPixel_from_WidthBlock(1),
 		getHeightPixel_from_HeightBlock(1)
 	);
-	buttonDragDrop->SetSize(50, 50);
+	bomberman->SetSize(50, 50);
 	//bomberman
 
 	shader = ResourceManagers::GetInstance()->GetShader("TextShader");
@@ -678,20 +675,20 @@ void GSPlay::eatShoes() {
 }
 
 void GSPlay::eatClockOrShoes(){
-	if (getWidthBlock_from_WidthPixel(buttonDragDrop->Get2DPosition().x) == getWidthBlock_from_WidthPixel(m_clock->Get2DPosition().x)
-		&& getHeightBlock_from_HeightPixel(buttonDragDrop->Get2DPosition().y) == getHeightBlock_from_HeightPixel(m_clock->Get2DPosition().y)) {
+	if (getWidthBlock_from_WidthPixel(bomberman->Get2DPosition().x) == getWidthBlock_from_WidthPixel(m_clock->Get2DPosition().x)
+		&& getHeightBlock_from_HeightPixel(bomberman->Get2DPosition().y) == getHeightBlock_from_HeightPixel(m_clock->Get2DPosition().y)) {
 		eatClock();
 	}
-	else if (getWidthBlock_from_WidthPixel(buttonDragDrop->Get2DPosition().x) == getWidthBlock_from_WidthPixel(m_shoes->Get2DPosition().x)
-		&& getHeightBlock_from_HeightPixel(buttonDragDrop->Get2DPosition().y) == getHeightBlock_from_HeightPixel(m_shoes->Get2DPosition().y)) {
+	else if (getWidthBlock_from_WidthPixel(bomberman->Get2DPosition().x) == getWidthBlock_from_WidthPixel(m_shoes->Get2DPosition().x)
+		&& getHeightBlock_from_HeightPixel(bomberman->Get2DPosition().y) == getHeightBlock_from_HeightPixel(m_shoes->Get2DPosition().y)) {
 		eatShoes();
 	}
 }
 
 void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 {
-	double momentX = (buttonDragDrop->Get2DPosition()).x;
-	double momentY = (buttonDragDrop->Get2DPosition()).y;
+	double momentX = (bomberman->Get2DPosition()).x;
+	double momentY = (bomberman->Get2DPosition()).y;
 	int blockWidth = getWidthBlock_from_WidthPixel(momentX);
 	int blockHeight = getHeightBlock_from_HeightPixel(momentY);
 	//Ấn nút lên thì y giảm, x giữ nguyên nhưng làm tròn theo block
@@ -699,12 +696,12 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 		if (momentY >= 100
 			&& isGrass(momentX, momentY - 26)
 			) {	//ấn nút trái thì có thể đi được
-			buttonDragDrop->Set2DPosition(
+			bomberman->Set2DPosition(
 				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(momentX)),
 				momentY - delta_pixel);
 			eatClockOrShoes();
-			if ((buttonDragDrop->Get2DPosition()).y < 100) {	//ra ngoài màn hình
-				buttonDragDrop->Set2DPosition(
+			if ((bomberman->Get2DPosition()).y < 100) {	//ra ngoài màn hình
+				bomberman->Set2DPosition(
 					momentX,
 					100);
 			}
@@ -718,12 +715,12 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 		if (momentY <= 700
 			&& isGrass(momentX, momentY + 25)
 			) {
-			buttonDragDrop->Set2DPosition(
+			bomberman->Set2DPosition(
 				getWidthPixel_from_WidthBlock(getWidthBlock_from_WidthPixel(momentX)),
 				momentY + delta_pixel);
 			eatClockOrShoes();
-			if ((buttonDragDrop->Get2DPosition()).y > 700) {
-				buttonDragDrop->Set2DPosition(
+			if ((bomberman->Get2DPosition()).y > 700) {
+				bomberman->Set2DPosition(
 					momentX,
 					700);
 			}
@@ -737,12 +734,12 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 		if (momentX >= 110 
 			&& isGrass(momentX - 26, momentY)
 			) {
-			buttonDragDrop->Set2DPosition(
+			bomberman->Set2DPosition(
 				momentX - delta_pixel,
 				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(momentY)));
 			eatClockOrShoes();
-			if ((buttonDragDrop->Get2DPosition()).x < 110) {
-				buttonDragDrop->Set2DPosition(
+			if ((bomberman->Get2DPosition()).x < 110) {
+				bomberman->Set2DPosition(
 					110,
 					momentY);
 			}
@@ -755,12 +752,12 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 		if (momentX <= 1410 
 			&& isGrass(momentX + 25, momentY)
 			) {
-			buttonDragDrop->Set2DPosition(
+			bomberman->Set2DPosition(
 				momentX + delta_pixel,
 				getHeightPixel_from_HeightBlock(getHeightBlock_from_HeightPixel(momentY)));
 			eatClockOrShoes();
-			if ((buttonDragDrop->Get2DPosition()).x > 1410) {
-				buttonDragDrop->Set2DPosition(
+			if ((bomberman->Get2DPosition()).x > 1410) {
+				bomberman->Set2DPosition(
 					1410,
 					momentY);
 			}
@@ -773,17 +770,29 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)	//ấn bàn phím
 	else if (key == VK_SPACE && bIsPressed == true && bombstatus.size() < 2) {	//ấn nút cách để đặt bom
 		if ((bombstatus.size() == 1 && bombstatus.front().index == 2) || bombstatus.size() == 0){
 			cout << "Dat bomb bang phim space, bombstatus.size() = " << bombstatus.size() << "\n";
-			double yourPixelWidth = (buttonDragDrop->Get2DPosition()).x;
-			double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
+			double yourPixelWidth = (bomberman->Get2DPosition()).x;
+			double yourPixelHeight = (bomberman->Get2DPosition()).y;
 			SetBomb(yourPixelWidth, yourPixelHeight);
 		}
+	}
+
+	else if ((key == VK_F1 || key == VK_F2 || key == VK_F3) && bIsPressed == true) {	//Chọn level1
+		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM" + to_string(level));
+		ofstream Level("C:\\Users\\dell\\Desktop\\Programming_anim\\TrainingFramework\\src\\GameStates\\level.txt");
+		if (key == VK_F1) Level << to_string(1);
+		else if (key == VK_F2) Level << to_string(2);
+		else if (key == VK_F1) Level << to_string(3);
+		Level.close();
+		GameStateMachine::GetInstance()->PopState();
+		GameStateMachine::GetInstance()->PopState();
+		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_StageGameStart);
 	}
 
 	else if (key == VK_SHIFT && bIsPressed == true && bombstatus.size() < 2) {
 		if ((bombstatus.size() == 1 && bombstatus.front().index == 1) || bombstatus.size() == 0) {
 			cout << "Dat bomb bang phim shift, bombstatus.size() = " << bombstatus.size() << "\n";
-			double yourPixelWidth = (buttonDragDrop->Get2DPosition()).x;
-			double yourPixelHeight = (buttonDragDrop->Get2DPosition()).y;
+			double yourPixelWidth = (bomberman->Get2DPosition()).x;
+			double yourPixelHeight = (bomberman->Get2DPosition()).y;
 			SetBomb2(yourPixelWidth, yourPixelHeight);
 		}
 	}
@@ -806,9 +815,14 @@ void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)	//ấn chuột
 		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM" + to_string(level));	//ấn nút back thì dừng nhạc
 	}
 
-	if (bIsPressed == true && hasAllEnemiesBeKilled == 1 
+	if (bIsPressed == true && hasAllEnemiesBeKilled == 1 //Diệt hết enemies và click vào cửa thì PlayAgain
 		&& getWidthBlock_from_WidthPixel(x) == doorWidthByBlock
 		&& getHeightBlock_from_HeightPixel(y) == doorHeightByBlock) {
+		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM" + to_string(level));
+		ofstream Level("C:\\Users\\dell\\Desktop\\Programming_anim\\TrainingFramework\\src\\GameStates\\level.txt");
+		Level << to_string(level >= 3 ? 1 : level + 1);
+		Level.close();
+
 		GameStateMachine::GetInstance()->PopState();
 		GameStateMachine::GetInstance()->PopState();
 		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_StageGameStart);
@@ -974,7 +988,7 @@ void GSPlay::Update(float deltaTime)	//hoạt ảnh chuyển động
 		it->Update(deltaTime);
 	}
 	PlayAgain(deltaTime);
-	buttonDragDrop->Update(deltaTime);
+	bomberman->Update(deltaTime);
 	EnemiesMoving(deltaTime);
 	EnemiesChangeDirection(deltaTime);
 	HasBombermanBeenFired(deltaTime);
@@ -1005,7 +1019,7 @@ void GSPlay::Draw()	//render lên màn hình
 		it->Draw();
 	}
 
-	buttonDragDrop->Draw();
+	bomberman->Draw();
 
 	for (auto it : m_listSpriteAnimations)
 	{
@@ -1113,8 +1127,8 @@ void GSPlay::FinishExplode2(float deltaTime) {
 //15. kiểm tra xem người chơi có chạm vào tia lửa hay ko
 void GSPlay::HasBombermanBeenFired(float deltaTime) {	//kiểm tra xem người chơi có chạm vào tia lửa hay ko
 	if (!m_fires.empty()) {
-		int myPositionBlockWidth = getWidthBlock_from_WidthPixel((buttonDragDrop->Get2DPosition().x));
-		int myPositionBlockHeight = getHeightBlock_from_HeightPixel((buttonDragDrop->Get2DPosition().y));
+		int myPositionBlockWidth = getWidthBlock_from_WidthPixel((bomberman->Get2DPosition().x));
+		int myPositionBlockHeight = getHeightBlock_from_HeightPixel((bomberman->Get2DPosition().y));
 		for (int i = 0; i < m_fires.size(); i++) {
 			int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_fires[i]->Get2DPosition().x));
 			int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_fires[i]->Get2DPosition().y));
@@ -1126,8 +1140,8 @@ void GSPlay::HasBombermanBeenFired(float deltaTime) {	//kiểm tra xem người 
 	}
 
 	if (!m_fires2.empty()) {
-		int myPositionBlockWidth = getWidthBlock_from_WidthPixel((buttonDragDrop->Get2DPosition().x));
-		int myPositionBlockHeight = getHeightBlock_from_HeightPixel((buttonDragDrop->Get2DPosition().y));
+		int myPositionBlockWidth = getWidthBlock_from_WidthPixel((bomberman->Get2DPosition().x));
+		int myPositionBlockHeight = getHeightBlock_from_HeightPixel((bomberman->Get2DPosition().y));
 		for (int i = 0; i < m_fires2.size(); i++) {
 			int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_fires2[i]->Get2DPosition().x));
 			int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_fires2[i]->Get2DPosition().y));
@@ -1204,8 +1218,8 @@ void GSPlay::recoverVEnemies(){
 //17. kiểm tra xem người chơi có chạm vào enemies hay ko
 void GSPlay::HasBombermanBeenTouchedByEnemies(float deltaTime) {//kiểm tra xem người chơi có chạm vào enemies hay ko
 	
-	int myPositionBlockWidth = getWidthBlock_from_WidthPixel((buttonDragDrop->Get2DPosition().x));
-	int myPositionBlockHeight = getHeightBlock_from_HeightPixel((buttonDragDrop->Get2DPosition().y));
+	int myPositionBlockWidth = getWidthBlock_from_WidthPixel((bomberman->Get2DPosition().x));
+	int myPositionBlockHeight = getHeightBlock_from_HeightPixel((bomberman->Get2DPosition().y));
 	for (int i = 0; i < m_enemies.size();i++) {
 		int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[i]->Get2DPosition().x));
 		int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[i]->Get2DPosition().y));
@@ -1221,8 +1235,8 @@ void GSPlay::HasBombermanBeenTouchedByEnemies(float deltaTime) {//kiểm tra xem
 void GSPlay::DiedBomberman(float deltaTime){
 	ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM" + to_string(level));
 	ResourceManagers::GetInstance()->PlaySound("death", false);
-	m_skull->Set2DPosition(buttonDragDrop->Get2DPosition().x, buttonDragDrop->Get2DPosition().y);
-	buttonDragDrop->Set2DPosition(getWidthPixel_from_WidthBlock((100)), getHeightPixel_from_HeightBlock((100)));
+	m_skull->Set2DPosition(bomberman->Get2DPosition().x, bomberman->Get2DPosition().y);
+	bomberman->Set2DPosition(getWidthPixel_from_WidthBlock((100)), getHeightPixel_from_HeightBlock((100)));
 	m_time += deltaTime;
 }
 
@@ -1276,7 +1290,7 @@ void GSPlay::BreakDoor(int blockWidth, int blockHeight) {
 
 //22. Diệt hết enemies, vào cửa để sang stage tiếp theo
 void GSPlay::NextLevel() {
-	if (getWidthBlock_from_WidthPixel(buttonDragDrop->Get2DPosition().x) == doorWidthByBlock && getHeightBlock_from_HeightPixel(buttonDragDrop->Get2DPosition().y) == doorHeightByBlock) {
+	if (getWidthBlock_from_WidthPixel(bomberman->Get2DPosition().x) == doorWidthByBlock && getHeightBlock_from_HeightPixel(bomberman->Get2DPosition().y) == doorHeightByBlock) {
 		ResourceManagers::GetInstance()->PauseSound("Level1/LevelBGM" + to_string(level));	//vào cửa thì dừng nhạc
 		ResourceManagers::GetInstance()->PlaySound("stage_clear");
 	}

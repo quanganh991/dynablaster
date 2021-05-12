@@ -110,7 +110,7 @@ private:
 	std::shared_ptr<Text>  m_level;
 	std::vector<std::shared_ptr<GameButton>>	m_listButton;
 	std::vector<std::shared_ptr<SpriteAnimation>> m_listSpriteAnimations;
-	std::shared_ptr<SpriteAnimation> buttonDragDrop;
+	std::shared_ptr<SpriteAnimation> bomberman;
 	
 	float finishFireTime = 1; //thời gian tia lửa của bom 1 tồn tại là 1s
 	bool hasFireBeenFinished = 1;

@@ -193,7 +193,7 @@ void GSBattle::Init()
 	button->SetSize(150, 50);
 	button->SetOnClick([]() {
 		GameStateMachine::GetInstance()->PopState();
-		//GameStateMachine::GetInstance()->PopState();
+		GameStateMachine::GetInstance()->PopState();
 		ResourceManagers::GetInstance()->PlaySound("Level1/TitleScreen", true);
 	});
 	m_listButton.push_back(button);
@@ -808,7 +808,7 @@ void GSBattle::Update(float deltaTime)	//hoạt ảnh chuyển động
 	{
 		it->Update(deltaTime);
 	}
-	PlayAgain(deltaTime);
+	ShowResult(deltaTime);
 	Player1->Update(deltaTime);
 	Player2->Update(deltaTime);
 
@@ -989,6 +989,10 @@ void GSBattle::DiedBomberman(float deltaTime) {
 	m_skull->Set2DPosition(Player1->Get2DPosition().x, Player1->Get2DPosition().y);
 	Player1->Set2DPosition(getWidthPixel_from_WidthBlock((300)), getHeightPixel_from_HeightBlock((300)));
 	m_time += deltaTime;
+	deaths++;
+	ofstream Level("C:\\Users\\dell\\Desktop\\Programming_anim\\TrainingFramework\\src\\GameStates\\battle_result.txt");
+	Level << to_string(deaths == 1 ? 2 : 0);
+	Level.close();
 }
 void GSBattle::DiedBomberman2(float deltaTime) {
 	ResourceManagers::GetInstance()->PauseSound("Level1/BattleMusic");
@@ -996,17 +1000,19 @@ void GSBattle::DiedBomberman2(float deltaTime) {
 	m_skull->Set2DPosition(Player2->Get2DPosition().x, Player2->Get2DPosition().y);
 	Player2->Set2DPosition(getWidthPixel_from_WidthBlock((300)), getHeightPixel_from_HeightBlock((300)));
 	m_time += deltaTime;
+	deaths++;
+	ofstream Level("C:\\Users\\dell\\Desktop\\Programming_anim\\TrainingFramework\\src\\GameStates\\battle_result.txt");
+	Level << to_string(deaths == 1 ? 1 : 0);
+	Level.close();
 }
 
-//19. Chơi lại màn chơi sau khi chết
-void GSBattle::PlayAgain(float deltaTime) {
+//19. 1 trong 2 hoặc cả 2 người chơi chết thì đi đến màn hình kết quả
+void GSBattle::ShowResult(float deltaTime) {
 	if (m_time > 0)	//Khi hàm DiedBomberman đc gọi 1 lần thì hàm này sẽ được kích hoạt
 	{
 		m_time += deltaTime;
 		if (m_time > 4.5) {
-			GameStateMachine::GetInstance()->PopState();
-			GameStateMachine::GetInstance()->PopState();
-			GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Battle);
+			GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_BattleResult);
 			m_time = 0;
 		}
 	}

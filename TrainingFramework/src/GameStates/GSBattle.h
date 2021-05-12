@@ -69,7 +69,7 @@ public:
 	void Draw();
 	void DiedBomberman(float deltaTime);
 	void DiedBomberman2(float deltaTime);
-	void PlayAgain(float deltaTime);
+	void ShowResult(float deltaTime);
 	void CheckBreakShoes(); void eatShoes();
 private:
 
@@ -118,4 +118,5 @@ private:
 	double m_time = 0;
 	int delta_pixel_1 = 10;
 	int delta_pixel_2 = 50;
+	int deaths = 0;
 };

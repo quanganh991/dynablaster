@@ -275,6 +275,8 @@
     <ClCompile Include="src\GameStates\GameStatebase.cpp" />
     <ClCompile Include="src\GameStates\GameStateMachine.cpp" />
     <ClCompile Include="src\GameStates\GSBattle.cpp" />
+    <ClCompile Include="src\GameStates\GSBattleGameStart.cpp" />
+    <ClCompile Include="src\GameStates\GSBattleResult.cpp" />
     <ClCompile Include="src\GameStates\GSIntro.cpp" />
     <ClCompile Include="src\GameStates\GSMenu.cpp" />
     <ClCompile Include="src\GameStates\GSPlay.cpp" />
@@ -300,6 +302,8 @@
     <ClInclude Include="src\GameStates\GameStatebase.h" />
     <ClInclude Include="src\GameStates\GameStateMachine.h" />
     <ClInclude Include="src\GameStates\GSBattle.h" />
+    <ClInclude Include="src\GameStates\GSBattleGameStart.h" />
+    <ClInclude Include="src\GameStates\GSBattleResult.h" />
     <ClInclude Include="src\GameStates\GSIntro.h" />
     <ClInclude Include="src\GameStates\GSMenu.h" />
     <ClInclude Include="src\GameStates\GSPlay.h" />
@@ -309,6 +313,7 @@
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="src\GameStates\battle_result.txt" />
     <Text Include="src\GameStates\level.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

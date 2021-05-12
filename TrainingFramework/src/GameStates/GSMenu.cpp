@@ -51,14 +51,14 @@ void GSMenu::Init()
 	});
 	m_listButton.push_back(button);
 
-	//setting button	Xử lý sự kiện ấn nút setting
+	//battle button	Xử lý sự kiện ấn nút battle
 	texture = ResourceManagers::GetInstance()->GetTexture("button_battle");
 	button = std::make_shared<GameButton>(model, shader, texture);
 	button->Set2DPosition(screenWidth / 2, screenHeight * 0.6);
 	button->SetSize(screenWidth * 5.0f / 38, screenHeight * 0.0625f);
 	button->SetOnClick([]() {
 		ResourceManagers::GetInstance()->PauseSound("Level1/TitleScreen");
-		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Battle);
+		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_BattleGameStart);
 	});
 	m_listButton.push_back(button);
 
