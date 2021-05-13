@@ -13,6 +13,7 @@
 #define MAX_RD_DELTATIME 90
 #define MIN_RD_DELTATIME 80
 #define INITIAL_SPEED 6
+#define FIRE_LENGTH 6
 #define OMEGA 100
 using namespace std;
 extern int screenWidth; //need get on Graphic engine
@@ -324,14 +325,14 @@ void GSBattle::SetExplode(int pixelWidth, int pixelHeight) {	//khi bom 1 nổ th
 		if (bombstatus.size() == 2) {	//nếu đang có 2 quả bom trên màn hình
 			if (bombstatus.front().index == 1) {	//giả sử bom 1 nổ trước, tác động đến bom 2
 				if (bombstatus.front().xBlock == bombstatus.back().xBlock) {	//cùng 1 cột
-					if (abs(bombstatus.front().yBlock - bombstatus.back().yBlock) <= 8) {
-						//cùng 1 hàng và cách nhau chưa tới 8 theo chiều ngang
+					if (abs(bombstatus.front().yBlock - bombstatus.back().yBlock) <= FIRE_LENGTH) {
+						//cùng 1 hàng và cách nhau chưa tới FIRE_LENGTH theo chiều ngang
 						finishBomb2Time = 0.0000001;
 					}
 				}
 				if (bombstatus.front().yBlock == bombstatus.back().yBlock) {	//cùng 1 hàng
-					if (abs(bombstatus.front().xBlock - bombstatus.back().xBlock) <= 8) {
-						//cùng 1 cột và cách nhau chưa tới 8 theo chiều dọc
+					if (abs(bombstatus.front().xBlock - bombstatus.back().xBlock) <= FIRE_LENGTH) {
+						//cùng 1 cột và cách nhau chưa tới FIRE_LENGTH theo chiều dọc
 						finishBomb2Time = 0.0000001;
 					}
 				}
@@ -355,7 +356,7 @@ void GSBattle::ExplodeLeft(int pixelWidth, int pixelHeight, int whichFire) {
 		index_m_bricks.push_back(i);
 	}
 	//tất cả tọa độ theo block của các viên gạch đã được lưu trong blockWidths và blockHeights
-	for (int i = 1; i <= 8; i++) {
+	for (int i = 0; i <= FIRE_LENGTH; i++) {
 		//ko gặp cỏ mà gặp gạch hoặc đá
 		if (isGrass(pixelWidth - 50 * i, pixelHeight) == false) {	//dù gặp gạch hay gặp đá thì vòng lặp cũng sẽ dừng lại ngay lập tức
 																	//gặp đá thì break luôn (tọa độ block theo cả 2 chiều đều là số chẵn)
@@ -408,7 +409,7 @@ void GSBattle::ExplodeRight(int pixelWidth, int pixelHeight, int whichFire) {
 		index_m_bricks.push_back(i);
 	}
 	//tất cả tọa độ theo block của các viên gạch đã được lưu trong blockWidths và blockHeights
-	for (int i = 1; i <= 8; i++) {
+	for (int i = 0; i <= FIRE_LENGTH; i++) {
 		//ko gặp cỏ mà gặp gạch hoặc đá
 		if (isGrass(pixelWidth + 50 * i, pixelHeight) == false) {	//dù gặp gạch hay gặp đá thì vòng lặp cũng sẽ dừng lại ngay lập tức
 																	//gặp đá thì break luôn (tọa độ block theo cả 2 chiều đều là số chẵn)
@@ -463,7 +464,7 @@ void GSBattle::ExplodeUp(int pixelWidth, int pixelHeight, int whichFire) {
 		index_m_bricks.push_back(i);
 	}
 	//tất cả tọa độ theo block của các viên gạch đã được lưu trong blockWidths và blockHeights
-	for (int i = 1; i <= 8; i++) {
+	for (int i = 0; i <= FIRE_LENGTH; i++) {
 		//ko gặp cỏ mà gặp gạch hoặc đá
 		if (isGrass(pixelWidth, pixelHeight - 50 * i) == false) {	//dù gặp gạch hay gặp đá thì vòng lặp cũng sẽ dừng lại ngay lập tức
 																	//gặp đá thì break luôn (tọa độ block theo cả 2 chiều đều là số chẵn)
@@ -516,7 +517,7 @@ void GSBattle::ExplodeDown(int pixelWidth, int pixelHeight, int whichFire) {
 		index_m_bricks.push_back(i);
 	}
 	//tất cả tọa độ theo block của các viên gạch đã được lưu trong blockWidths và blockHeights
-	for (int i = 1; i <= 8; i++) {
+	for (int i = 0; i <= FIRE_LENGTH; i++) {
 		//ko gặp cỏ mà gặp gạch hoặc đá
 		if (isGrass(pixelWidth, pixelHeight + 50 * i) == false) {	//dù gặp gạch hay gặp đá thì vòng lặp cũng sẽ dừng lại ngay lập tức
 																	//gặp đá thì break luôn (tọa độ block theo cả 2 chiều đều là số chẵn)
@@ -897,14 +898,14 @@ void GSBattle::SetExplode2(int pixelWidth, int pixelHeight) {	//bắn tia lửa
 
 
 				if (bombstatus.front().xBlock == bombstatus.back().xBlock) {	//cùng 1 cột
-					if (abs(bombstatus.front().yBlock - bombstatus.back().yBlock) <= 8) {
-						//cùng 1 hàng và cách nhau chưa tới 8 theo chiều ngang
+					if (abs(bombstatus.front().yBlock - bombstatus.back().yBlock) <= FIRE_LENGTH) {
+						//cùng 1 hàng và cách nhau chưa tới FIRE_LENGTH theo chiều ngang
 						finishBomb1Time = 0.0000001;
 					}
 				}
 				if (bombstatus.front().yBlock == bombstatus.back().yBlock) {	//cùng 1 hàng
-					if (abs(bombstatus.front().xBlock - bombstatus.back().xBlock) <= 8) {
-						//cùng 1 cột và cách nhau chưa tới 8 theo chiều dọc
+					if (abs(bombstatus.front().xBlock - bombstatus.back().xBlock) <= FIRE_LENGTH) {
+						//cùng 1 cột và cách nhau chưa tới FIRE_LENGTH theo chiều dọc
 						finishBomb1Time = 0.0000001;
 					}
 				}
