@@ -154,15 +154,15 @@ void GSPlay::InitEnemies() {
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 	
 
-	for (int i = 0; i < 10; i++) {
-		auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/enemy" + to_string((i%4) + 3*(level - 1)));
+	for (int i = 0; i < 6*level; i++) {
+		auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/enemy" + to_string((i%10)));
 		std::shared_ptr<SpriteAnimation> enemy = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
 		enemy->Set2DPosition(getWidthPixel_from_WidthBlock(27 - i), getHeightPixel_from_HeightBlock(13));
 		enemy->SetSize(50, 50);
 		m_enemies.push_back(enemy);
 	}
 	for (int i = 0; i < m_enemies.size(); i++) {
-		m_enemies_direction.push_back(rand() % 4 + 1);	//khởi tạo hướng đi ngẫu nhiên cho enemy
+		m_enemies_direction.push_back(1);	//khởi tạo hướng đi ngẫu nhiên cho enemy
 		Venemies.push_back(INITIAL_SPEED);	//vận tốc ban đầu của tất cả enemies là 6 pixel/deltaTime
 	}
 }
