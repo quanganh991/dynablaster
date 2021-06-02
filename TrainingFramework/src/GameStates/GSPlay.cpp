@@ -151,12 +151,12 @@ void GSPlay::InitRocks() {
 //4. đặt các enemies lên màn hình
 void GSPlay::InitEnemies() {
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
-	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	auto shader = ResourceManagers::GetInstance()->GetShader("Animation");
 	
 
 	for (int i = 0; i < 6*level; i++) {
 		auto texture = ResourceManagers::GetInstance()->GetTexture("enemies/enemy" + to_string((i%10)));
-		std::shared_ptr<SpriteAnimation> enemy = std::make_shared<SpriteAnimation>(model, shader, texture, 1, 1.0f / 1);
+		std::shared_ptr<SpriteAnimation> enemy = std::make_shared<SpriteAnimation>(model, shader, texture, 4, 1.0f / 6);
 		enemy->Set2DPosition(getWidthPixel_from_WidthBlock(27 - i), getHeightPixel_from_HeightBlock(13));
 		enemy->SetSize(50, 50);
 		m_enemies.push_back(enemy);
@@ -271,7 +271,7 @@ void GSPlay::Init()
 	m_score->Set2DPosition(getWidthPixel_from_WidthBlock(0)-25, getHeightPixel_from_HeightBlock(0));
 
 	//level
-	m_level = std::make_shared< Text>(shader, font, "Level: 1", TEXT_COLOR::CYAN, 1.0);	//level
+	m_level = std::make_shared< Text>(shader, font, "Level: "+ to_string(level), TEXT_COLOR::CYAN, 1.0);	//level
 	m_level->Set2DPosition(getWidthPixel_from_WidthBlock(2), getHeightPixel_from_HeightBlock(0));
 	//coins total quantity
 	m_coins = std::make_shared< Text>(shader, font, "x : 0", TEXT_COLOR::PURPLE, 1.0);	//so xu da an duoc
@@ -1166,9 +1166,10 @@ void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có
 				int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[enemy_index]->Get2DPosition().x));
 				int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[enemy_index]->Get2DPosition().y));
 				if (enemyPositionBlockWidth == firePositionBlockWidth && enemyPositionBlockHeight == firePositionBlockHeight) {
-					m_enemies[enemy_index]->Set2DPosition(50 * (enemy_index + 9),0);	//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
 					Venemies[enemy_index] = 0;
 					m_coins->setText("x : " + to_string(++killedEnemies));
+					m_score->setText("Score: "+to_string(killedEnemies) + "0");
+					m_enemies[enemy_index]->Set2DPosition(50 * (enemy_index + 9), 0);	//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
 					if (Venemies[0] < INITIAL_SPEED) {
 						recoverVEnemies();
 					}
@@ -1192,9 +1193,10 @@ void GSPlay::HasEnemiesBeenFired(float deltaTime) {	//kiểm tra xem enemies có
 				int enemyPositionBlockWidth = getWidthBlock_from_WidthPixel((m_enemies[enemy_index]->Get2DPosition().x));
 				int enemyPositionBlockHeight = getHeightBlock_from_HeightPixel((m_enemies[enemy_index]->Get2DPosition().y));
 				if (enemyPositionBlockWidth == firePositionBlockWidth && enemyPositionBlockHeight == firePositionBlockHeight) {
-					m_enemies[enemy_index]->Set2DPosition(50 * (enemy_index + 9), 0);//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
 					Venemies[enemy_index] = 0;
 					m_coins->setText("x : " + to_string(++killedEnemies));
+					m_score->setText("Score: " + to_string(killedEnemies) + "0");
+					m_enemies[enemy_index]->Set2DPosition(50 * (enemy_index + 9), 0);//INDEX = 0 VS = 1 CÓ VẺ NHÌN GIỐNG NHAU
 					if (Venemies[0] < INITIAL_SPEED) {
 						recoverVEnemies();
 					}
